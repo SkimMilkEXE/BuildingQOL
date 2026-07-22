@@ -1,0 +1,3 @@
+displayName = Building Quality of Life Improvements
+author = SkimMilkEXE
+version = 0.1
