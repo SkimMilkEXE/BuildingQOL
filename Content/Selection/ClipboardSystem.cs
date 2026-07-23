@@ -205,7 +205,7 @@ namespace BuildingQOL.Content.Selection
 				if (!WorldGen.InWorld(worldX, worldY))
 					continue;
 
-				int chestIndex = Chest.FindEmptyChest();
+				int chestIndex = Array.IndexOf(Main.chest, null);
 				if (chestIndex == -1)
 					continue;
 
