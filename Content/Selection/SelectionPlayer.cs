@@ -24,6 +24,12 @@ namespace BuildingQOL.Content.Selection
 				SelectionSystem.Corner1 = null;
 				SelectionSystem.Corner2 = null;
 			}
+
+			if (ClipboardSystem.CopyKeybind.JustPressed)
+				ClipboardSystem.Copy();
+
+			if (ClipboardSystem.PasteKeybind.JustPressed)
+				ClipboardSystem.Paste(targetTile);
 		}
 	}
 }
