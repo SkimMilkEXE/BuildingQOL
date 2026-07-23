@@ -1,1 +1,30 @@
-This description will show up on the steam page, check out https://steamcommunity.com/comment/Guide/formattinghelp.
+[h1]Building Quality of Life[/h1]
+[b] Under development — features and keybinds may change.
+
+A WorldEdit-style selection and copy/paste tool for builders.
+
+[h2]Features[/h2]
+[list]
+[*] Select a rectangular region with two corner keybinds
+[*] Live selection preview that follows your cursor before you lock in the second corner
+[*] Copy and paste tiles/walls (type, frame, slope, half-block, paint) within the same world
+[*] Ghost preview showing exactly where a paste will land before you commit
+[*] Erase all tiles/walls inside a selection in one keypress
+[*] Optional full-screen tile grid overlay for precise alignment
+[*] Mod config for outline color/thickness and auto-reframe on paste
+[/list]
+
+[h2]Default Keybinds[/h2]
+(all rebindable in Settings > Controls)
+[list]
+[*] [ - Set selection corner 1
+[*] ] - Set selection corner 2
+[*] Backspace - Clear selection
+[*] Delete - Erase tiles/walls in selection
+[*] C - Copy selection
+[*] V - Paste at cursor
+[*] G - Toggle grid overlay
+[/list]
+
+[h2]Notes[/h2]
+Tile entities (chests, signs) and multiplayer sync aren't supported yet — copy/paste currently covers raw tile and wall data only. More to come.

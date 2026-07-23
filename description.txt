@@ -1,1 +1,12 @@
-Modify this file with a description of your mod.
+Building Quality of Life adds a WorldEdit-style selection and copy/paste tool for builders.
+
+Mark two corners, then copy, paste, or erase everything inside the selection. Includes a live selection preview, a paste ghost preview, an optional tile grid overlay, and a mod config for outline color/thickness and paste behavior.
+
+Default keybinds (rebindable in Settings > Controls):
+[ - Set selection corner 1
+] - Set selection corner 2
+Backspace - Clear selection
+Delete - Erase tiles/walls in selection
+C - Copy selection
+V - Paste at cursor
+G - Toggle grid overlay
