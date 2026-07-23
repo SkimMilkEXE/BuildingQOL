@@ -10,3 +10,5 @@ Delete - Erase tiles/walls in selection
 C - Copy selection
 V - Paste at cursor
 G - Toggle grid overlay
+Z - Undo
+Y - Redo

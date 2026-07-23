@@ -41,6 +41,12 @@ namespace BuildingQOL.Content.Selection
 
 			if (GridSystem.ToggleKeybind.JustPressed)
 				GridSystem.Enabled = !GridSystem.Enabled;
+
+			if (UndoSystem.UndoKeybind.JustPressed)
+				UndoSystem.Undo();
+
+			if (UndoSystem.RedoKeybind.JustPressed)
+				UndoSystem.Redo();
 		}
 	}
 }

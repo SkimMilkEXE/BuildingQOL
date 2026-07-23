@@ -8,8 +8,10 @@ A WorldEdit-style selection and copy/paste tool for builders.
 [*] Select a rectangular region with two corner keybinds
 [*] Live selection preview that follows your cursor before you lock in the second corner
 [*] Copy and paste tiles/walls (type, frame, slope, half-block, paint) within the same world
+[*] Copy and paste chest contents, sign text, and other tile entities (item frames, weapon racks, display dolls, hat racks, food platters, logic sensors, training dummies, pylons) along with their tiles
 [*] Ghost preview showing exactly where a paste will land before you commit
 [*] Erase all tiles/walls inside a selection in one keypress
+[*] Undo/redo for paste and erase, up to 50 actions back
 [*] Optional full-screen tile grid overlay for precise alignment
 [*] Mod config for outline color/thickness and auto-reframe on paste
 [/list]
@@ -24,13 +26,14 @@ A WorldEdit-style selection and copy/paste tool for builders.
 [*] C - Copy selection
 [*] V - Paste at cursor
 [*] G - Toggle grid overlay
+[*] Z - Undo
+[*] Y - Redo
 [/list]
 
 [h2]Notes[/h2]
-Tile entities (chests, signs) and multiplayer sync aren't supported yet — copy/paste currently covers raw tile and wall data only. More to come.
+Save/load to file and multiplayer sync aren't supported yet. More to come.
 
 [h2]Links[/h2]
 [list]
-[*] Source: [url=https://github.com/SkimMilkEXE/BuildingQOL]github.com/SkimMilkEXE/BuildingQOL[/url]
 [*] Contact: [url=https://skimmilkexe.dev/]skimmilkexe.dev[/url]
 [/list]

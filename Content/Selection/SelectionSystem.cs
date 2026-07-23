@@ -47,6 +47,11 @@ namespace BuildingQOL.Content.Selection
 			int maxX = Math.Max(c1.X, c2.X);
 			int minY = Math.Min(c1.Y, c2.Y);
 			int maxY = Math.Max(c1.Y, c2.Y);
+			int width = maxX - minX + 1;
+			int height = maxY - minY + 1;
+			var anchor = new Point16(minX, minY);
+
+			RegionSnapshot before = RegionSnapshot.Capture(minX, minY, width, height);
 
 			for (int x = minX; x <= maxX; x++)
 			{
@@ -61,7 +66,9 @@ namespace BuildingQOL.Content.Selection
 			}
 
 			if (ModContent.GetInstance<BuildingQOLConfig>().AutoReframeOnPaste)
-				TileFraming.ReframeArea(minX, minY, maxX - minX + 1, maxY - minY + 1);
+				TileFraming.ReframeArea(minX, minY, width, height);
+
+			UndoSystem.Record(anchor, before, RegionSnapshot.Capture(minX, minY, width, height));
 		}
 
 		public override void PostDrawTiles()
