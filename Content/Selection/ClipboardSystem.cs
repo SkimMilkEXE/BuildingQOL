@@ -119,23 +119,8 @@ namespace BuildingQOL.Content.Selection
 				}
 			}
 
-			if (!ModContent.GetInstance<BuildingQOLConfig>().AutoReframeOnPaste)
-				return;
-
-			// Re-frame the pasted area plus a 1-tile border so it blends with existing neighbors.
-			for (int x = -1; x <= _width; x++)
-			{
-				for (int y = -1; y <= _height; y++)
-				{
-					int worldX = anchor.X + x;
-					int worldY = anchor.Y + y;
-					if (!WorldGen.InWorld(worldX, worldY))
-						continue;
-
-					WorldGen.TileFrame(worldX, worldY);
-					WorldGen.SquareWallFrame(worldX, worldY);
-				}
-			}
+			if (ModContent.GetInstance<BuildingQOLConfig>().AutoReframeOnPaste)
+				TileFraming.ReframeArea(anchor.X, anchor.Y, _width, _height);
 		}
 	}
 }

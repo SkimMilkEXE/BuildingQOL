@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace BuildingQOL.Content.Selection
@@ -17,12 +18,14 @@ namespace BuildingQOL.Content.Selection
 		public static ModKeybind SetCorner1Keybind;
 		public static ModKeybind SetCorner2Keybind;
 		public static ModKeybind ClearSelectionKeybind;
+		public static ModKeybind EraseSelectionKeybind;
 
 		public override void Load()
 		{
 			SetCorner1Keybind = KeybindLoader.RegisterKeybind(Mod, "Set Selection Corner 1", "OemOpenBrackets");
 			SetCorner2Keybind = KeybindLoader.RegisterKeybind(Mod, "Set Selection Corner 2", "OemCloseBrackets");
 			ClearSelectionKeybind = KeybindLoader.RegisterKeybind(Mod, "Clear Selection", "Back");
+			EraseSelectionKeybind = KeybindLoader.RegisterKeybind(Mod, "Erase Selection Tiles", "Delete");
 		}
 
 		public override void Unload()
@@ -30,8 +33,44 @@ namespace BuildingQOL.Content.Selection
 			SetCorner1Keybind = null;
 			SetCorner2Keybind = null;
 			ClearSelectionKeybind = null;
+			EraseSelectionKeybind = null;
 			Corner1 = null;
 			Corner2 = null;
+		}
+
+		// Clears tiles/walls in the selected area back to empty, then re-frames the border.
+		public static void Erase()
+		{
+			if (Corner1 is not Point16 c1 || Corner2 is not Point16 c2)
+				return;
+
+			int minX = Math.Min(c1.X, c2.X);
+			int maxX = Math.Max(c1.X, c2.X);
+			int minY = Math.Min(c1.Y, c2.Y);
+			int maxY = Math.Max(c1.Y, c2.Y);
+
+			for (int x = minX; x <= maxX; x++)
+			{
+				for (int y = minY; y <= maxY; y++)
+				{
+					if (!WorldGen.InWorld(x, y))
+						continue;
+
+					Tile tile = Main.tile[x, y];
+					tile.HasTile = false;
+					tile.TileType = 0;
+					tile.TileFrameX = 0;
+					tile.TileFrameY = 0;
+					tile.IsHalfBlock = false;
+					tile.Slope = SlopeType.Solid;
+					tile.TileColor = 0;
+					tile.WallType = 0;
+					tile.WallColor = 0;
+				}
+			}
+
+			if (ModContent.GetInstance<BuildingQOLConfig>().AutoReframeOnPaste)
+				TileFraming.ReframeArea(minX, minY, maxX - minX + 1, maxY - minY + 1);
 		}
 
 		public override void PostDrawTiles()

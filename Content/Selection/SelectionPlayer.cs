@@ -26,6 +26,9 @@ namespace BuildingQOL.Content.Selection
 				SelectionSystem.Corner2 = null;
 			}
 
+			if (SelectionSystem.EraseSelectionKeybind.JustPressed)
+				SelectionSystem.Erase();
+
 			if (ClipboardSystem.CopyKeybind.JustPressed)
 				ClipboardSystem.Copy();
 
