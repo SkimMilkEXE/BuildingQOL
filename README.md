@@ -8,6 +8,7 @@ A tModLoader mod that adds building quality of life features — currently a Wor
 
 - Select a rectangular region with two corner keybinds, with a live preview that follows the cursor
 - Copy/paste tiles and walls (type, frame, slope, half-block, paint) within the same world, with a paste ghost preview
+- Copy/paste chest contents, sign text, and other tile entities (item frames, weapon racks, display dolls, hat racks, food platters, logic sensors, training dummies, pylons) along with their tiles
 - Erase all tiles/walls inside a selection
 - Optional tile grid overlay for precise alignment
 - Mod config for outline color/thickness and auto-reframe on paste
@@ -30,7 +31,7 @@ Rebindable in-game via Settings > Controls.
 
 1. ~~Selection tool + visual outline~~
 2. ~~Copy/paste within the same world, tiles only~~
-3. Tile entity support (chests, signs)
+3. ~~Tile entity support (chests, signs)~~
 4. Undo
 5. Save/load to file for cross-world portability
 6. Multiplayer sync
