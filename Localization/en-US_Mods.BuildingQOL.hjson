@@ -4,4 +4,27 @@ Keybinds: {
 	"Set Selection Corner 1.DisplayName": Set  Selection  Corner 1
 	"Paste Selection.DisplayName": Paste  Selection
 	"Copy Selection.DisplayName": Copy  Selection
+	"Erase Selection Tiles.DisplayName": Erase  Selection  Tiles
+	"Toggle Tile Grid.DisplayName": Toggle  Tile  Grid
+}
+
+Configs: {
+	BuildingQOLConfig: {
+		AutoReframeOnPaste: {
+			Tooltip: Recalculates tile/wall visuals in and around the pasted area so it blends with neighbors
+			Label: Auto-reframe on paste
+		}
+
+		OutlineThickness: {
+			Tooltip: ""
+			Label: Outline Thickness
+		}
+
+		OutlineColor: {
+			Tooltip: ""
+			Label: Outline Color
+		}
+
+		DisplayName: Building Q O L Config
+	}
 }

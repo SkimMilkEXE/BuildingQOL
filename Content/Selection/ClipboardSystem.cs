@@ -44,15 +44,18 @@ namespace BuildingQOL.Content.Selection
 			_clipboard = null;
 		}
 
+		public static void Clear()
+		{
+			_clipboard = null;
+		}
+
 		// Ghost preview of where the clipboard will land, so paste isn't a blind guess.
 		public override void PostDrawTiles()
 		{
 			if (_clipboard == null)
 				return;
 
-			int tileX = (int)(Main.MouseWorld.X / 16);
-			int tileY = (int)(Main.MouseWorld.Y / 16);
-			Vector2 topLeft = new Vector2(tileX * 16, tileY * 16) - Main.screenPosition;
+			Vector2 topLeft = new Vector2(Terraria.Player.tileTargetX * 16, Terraria.Player.tileTargetY * 16) - Main.screenPosition;
 
 			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
 			Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Rectangle((int)topLeft.X, (int)topLeft.Y, _width * 16, _height * 16), Color.LimeGreen * 0.35f);

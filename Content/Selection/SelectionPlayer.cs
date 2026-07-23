@@ -12,10 +12,13 @@ namespace BuildingQOL.Content.Selection
 			if (Player.whoAmI != Main.myPlayer)
 				return;
 
-			var targetTile = new Point16((int)(Main.MouseWorld.X / 16), (int)(Main.MouseWorld.Y / 16));
+			var targetTile = new Point16(Terraria.Player.tileTargetX, Terraria.Player.tileTargetY);
 
 			if (SelectionSystem.SetCorner1Keybind.JustPressed)
+			{
 				SelectionSystem.Corner1 = targetTile;
+				SelectionSystem.Corner2 = null;
+			}
 
 			if (SelectionSystem.SetCorner2Keybind.JustPressed)
 				SelectionSystem.Corner2 = targetTile;
@@ -24,6 +27,7 @@ namespace BuildingQOL.Content.Selection
 			{
 				SelectionSystem.Corner1 = null;
 				SelectionSystem.Corner2 = null;
+				ClipboardSystem.Clear();
 			}
 
 			if (SelectionSystem.EraseSelectionKeybind.JustPressed)

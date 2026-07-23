@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace BuildingQOL.Content.Selection
@@ -38,7 +37,7 @@ namespace BuildingQOL.Content.Selection
 			Corner2 = null;
 		}
 
-		// Clears tiles/walls in the selected area back to empty, then re-frames the border.
+		// Clears tiles/walls in the selected area using the vanilla removal path (handles multi-tile objects and refresh correctly).
 		public static void Erase()
 		{
 			if (Corner1 is not Point16 c1 || Corner2 is not Point16 c2)
@@ -56,16 +55,8 @@ namespace BuildingQOL.Content.Selection
 					if (!WorldGen.InWorld(x, y))
 						continue;
 
-					Tile tile = Main.tile[x, y];
-					tile.HasTile = false;
-					tile.TileType = 0;
-					tile.TileFrameX = 0;
-					tile.TileFrameY = 0;
-					tile.IsHalfBlock = false;
-					tile.Slope = SlopeType.Solid;
-					tile.TileColor = 0;
-					tile.WallType = 0;
-					tile.WallColor = 0;
+					WorldGen.KillTile(x, y, noItem: true);
+					WorldGen.KillWall(x, y);
 				}
 			}
 
@@ -81,23 +72,33 @@ namespace BuildingQOL.Content.Selection
 
 			DrawCursorHighlight(pixel);
 
-			if (Corner1 is Point16 c1 && Corner2 is Point16 c2)
-				DrawSelectionOutline(pixel, c1, c2, ModContent.GetInstance<BuildingQOLConfig>());
+			// While only corner 1 is set, the outline follows the mouse as a live preview to help line up corner 2.
+			if (Corner1 is Point16 c1)
+			{
+				Point16 c2 = Corner2 ?? GetMouseTile();
+				BuildingQOLConfig config = ModContent.GetInstance<BuildingQOLConfig>();
+				Color color = Corner2 is null ? config.OutlineColor * 0.5f : config.OutlineColor;
+				DrawSelectionOutline(pixel, c1, c2, color, config.OutlineThickness);
+			}
 
 			Main.spriteBatch.End();
+		}
+
+		private static Point16 GetMouseTile()
+		{
+			return new Point16(Terraria.Player.tileTargetX, Terraria.Player.tileTargetY);
 		}
 
 		// Highlights the tile under the cursor so corner placement is precise even without the grid on.
 		private static void DrawCursorHighlight(Texture2D pixel)
 		{
-			int tileX = (int)(Main.MouseWorld.X / 16);
-			int tileY = (int)(Main.MouseWorld.Y / 16);
-			Vector2 pos = new Vector2(tileX * 16, tileY * 16) - Main.screenPosition;
+			Point16 mouseTile = GetMouseTile();
+			Vector2 pos = new Vector2(mouseTile.X * 16, mouseTile.Y * 16) - Main.screenPosition;
 
 			Main.spriteBatch.Draw(pixel, new Rectangle((int)pos.X, (int)pos.Y, 16, 16), Color.White * 0.3f);
 		}
 
-		private static void DrawSelectionOutline(Texture2D pixel, Point16 c1, Point16 c2, BuildingQOLConfig config)
+		private static void DrawSelectionOutline(Texture2D pixel, Point16 c1, Point16 c2, Color color, int thickness)
 		{
 			int minX = Math.Min(c1.X, c2.X);
 			int maxX = Math.Max(c1.X, c2.X);
@@ -107,9 +108,6 @@ namespace BuildingQOL.Content.Selection
 			Vector2 topLeft = new Vector2(minX * 16, minY * 16) - Main.screenPosition;
 			int width = (maxX - minX + 1) * 16;
 			int height = (maxY - minY + 1) * 16;
-
-			Color color = config.OutlineColor;
-			int thickness = config.OutlineThickness;
 
 			Main.spriteBatch.Draw(pixel, new Rectangle((int)topLeft.X, (int)topLeft.Y, width, thickness), color);
 			Main.spriteBatch.Draw(pixel, new Rectangle((int)topLeft.X, (int)topLeft.Y + height - thickness, width, thickness), color);
