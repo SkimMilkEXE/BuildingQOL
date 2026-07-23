@@ -36,9 +36,30 @@ namespace BuildingQOL.Content.Selection
 
 		public override void PostDrawTiles()
 		{
-			if (Corner1 is not Point16 c1 || Corner2 is not Point16 c2)
-				return;
+			Texture2D pixel = TextureAssets.MagicPixel.Value;
 
+			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
+
+			DrawCursorHighlight(pixel);
+
+			if (Corner1 is Point16 c1 && Corner2 is Point16 c2)
+				DrawSelectionOutline(pixel, c1, c2, ModContent.GetInstance<BuildingQOLConfig>());
+
+			Main.spriteBatch.End();
+		}
+
+		// Highlights the tile under the cursor so corner placement is precise even without the grid on.
+		private static void DrawCursorHighlight(Texture2D pixel)
+		{
+			int tileX = (int)(Main.MouseWorld.X / 16);
+			int tileY = (int)(Main.MouseWorld.Y / 16);
+			Vector2 pos = new Vector2(tileX * 16, tileY * 16) - Main.screenPosition;
+
+			Main.spriteBatch.Draw(pixel, new Rectangle((int)pos.X, (int)pos.Y, 16, 16), Color.White * 0.3f);
+		}
+
+		private static void DrawSelectionOutline(Texture2D pixel, Point16 c1, Point16 c2, BuildingQOLConfig config)
+		{
 			int minX = Math.Min(c1.X, c2.X);
 			int maxX = Math.Max(c1.X, c2.X);
 			int minY = Math.Min(c1.Y, c2.Y);
@@ -48,18 +69,13 @@ namespace BuildingQOL.Content.Selection
 			int width = (maxX - minX + 1) * 16;
 			int height = (maxY - minY + 1) * 16;
 
-			Texture2D pixel = TextureAssets.MagicPixel.Value;
-			Color color = Color.Cyan * 0.7f;
-			const int thickness = 2;
-
-			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
+			Color color = config.OutlineColor;
+			int thickness = config.OutlineThickness;
 
 			Main.spriteBatch.Draw(pixel, new Rectangle((int)topLeft.X, (int)topLeft.Y, width, thickness), color);
 			Main.spriteBatch.Draw(pixel, new Rectangle((int)topLeft.X, (int)topLeft.Y + height - thickness, width, thickness), color);
 			Main.spriteBatch.Draw(pixel, new Rectangle((int)topLeft.X, (int)topLeft.Y, thickness, height), color);
 			Main.spriteBatch.Draw(pixel, new Rectangle((int)topLeft.X + width - thickness, (int)topLeft.Y, thickness, height), color);
-
-			Main.spriteBatch.End();
 		}
 	}
 }

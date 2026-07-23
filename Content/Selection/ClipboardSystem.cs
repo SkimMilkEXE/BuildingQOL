@@ -1,5 +1,8 @@
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -39,6 +42,21 @@ namespace BuildingQOL.Content.Selection
 			CopyKeybind = null;
 			PasteKeybind = null;
 			_clipboard = null;
+		}
+
+		// Ghost preview of where the clipboard will land, so paste isn't a blind guess.
+		public override void PostDrawTiles()
+		{
+			if (_clipboard == null)
+				return;
+
+			int tileX = (int)(Main.MouseWorld.X / 16);
+			int tileY = (int)(Main.MouseWorld.Y / 16);
+			Vector2 topLeft = new Vector2(tileX * 16, tileY * 16) - Main.screenPosition;
+
+			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
+			Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Rectangle((int)topLeft.X, (int)topLeft.Y, _width * 16, _height * 16), Color.LimeGreen * 0.35f);
+			Main.spriteBatch.End();
 		}
 
 		public static void Copy()
@@ -100,6 +118,9 @@ namespace BuildingQOL.Content.Selection
 					tile.WallColor = data.WallColor;
 				}
 			}
+
+			if (!ModContent.GetInstance<BuildingQOLConfig>().AutoReframeOnPaste)
+				return;
 
 			// Re-frame the pasted area plus a 1-tile border so it blends with existing neighbors.
 			for (int x = -1; x <= _width; x++)
