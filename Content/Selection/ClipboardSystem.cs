@@ -57,7 +57,7 @@ namespace BuildingQOL.Content.Selection
 			int minY = System.Math.Min(c1.Y, c2.Y);
 			_width = System.Math.Abs(c1.X - c2.X) + 1;
 			_height = System.Math.Abs(c1.Y - c2.Y) + 1;
-			_clipboard = RegionSnapshot.Capture(minX, minY, _width, _height);
+			_clipboard = RegionSnapshot.Capture(minX, minY, _width, _height, includeChestItems: false);
 		}
 
 		public static void Paste(Point16 anchor)

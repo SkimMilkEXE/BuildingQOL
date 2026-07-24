@@ -29,7 +29,7 @@ namespace BuildingQOL.Content.Selection
 		private struct ChestData
 		{
 			public string Name;
-			public Item[] Items;
+			public Item[] Items; // null when captured without item contents (see Capture's includeChestItems)
 		}
 
 		public readonly int Width;
@@ -73,7 +73,9 @@ namespace BuildingQOL.Content.Selection
 			return -1;
 		}
 
-		public static RegionSnapshot Capture(int minX, int minY, int width, int height)
+		// includeChestItems is false for the clipboard so copy/paste can't duplicate items; undo/redo always needs
+		// full fidelity since it's restoring exactly what a paste/erase changed, not cloning anything new.
+		public static RegionSnapshot Capture(int minX, int minY, int width, int height, bool includeChestItems = true)
 		{
 			var snapshot = new RegionSnapshot(width, height);
 
@@ -101,9 +103,13 @@ namespace BuildingQOL.Content.Selection
 					if (chestIndex != -1)
 					{
 						Chest sourceChest = Main.chest[chestIndex];
-						var items = new Item[Chest.maxItems];
-						for (int slot = 0; slot < Chest.maxItems; slot++)
-							items[slot] = sourceChest.item[slot].Clone();
+						Item[] items = null;
+						if (includeChestItems)
+						{
+							items = new Item[Chest.maxItems];
+							for (int slot = 0; slot < Chest.maxItems; slot++)
+								items[slot] = sourceChest.item[slot].Clone();
+						}
 
 						snapshot._chests[new Point16(x, y)] = new ChestData { Name = sourceChest.name, Items = items };
 					}
@@ -179,9 +185,12 @@ namespace BuildingQOL.Content.Selection
 				if (chestIndex == -1)
 					continue;
 
-				Chest chest = new Chest(false) { x = worldX, y = worldY, name = entry.Value.Name };
-				for (int slot = 0; slot < Chest.maxItems; slot++)
-					chest.item[slot] = entry.Value.Items[slot].Clone();
+				Chest chest = new Chest(true) { x = worldX, y = worldY, name = entry.Value.Name };
+				if (entry.Value.Items != null)
+				{
+					for (int slot = 0; slot < Chest.maxItems; slot++)
+						chest.item[slot] = entry.Value.Items[slot].Clone();
+				}
 
 				Main.chest[chestIndex] = chest;
 			}
