@@ -41,4 +41,4 @@ Rebindable in-game via Settings > Controls.
 3. ~~Tile entity support (chests, signs)~~
 4. ~~Undo/Redo~~
 5. ~~Save/load to file for cross-world portability~~
-6. Multiplayer sync
+6. ~~Multiplayer sync~~ (implemented, needs testing with a second client)

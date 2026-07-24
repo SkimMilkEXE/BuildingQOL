@@ -35,7 +35,7 @@ A WorldEdit-style selection and copy/paste tool for builders.
 [/list]
 
 [h2]Notes[/h2]
-Multiplayer sync isn't supported yet. More to come.
+Multiplayer sync is in but still early — report any desync you hit.
 
 [h2]Links[/h2]
 [list]

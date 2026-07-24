@@ -239,6 +239,45 @@ namespace BuildingQOL.Content.Selection
 				using var reader = new BinaryReader(stream);
 				newEntity.ReadExtraData(reader, true);
 			}
+
+			if (Main.netMode != NetmodeID.SinglePlayer)
+				SyncToNetwork(anchor);
+		}
+
+		// Broadcasts the change so other clients (and the server, if we're a client) pick it up.
+		// This is the one part of the mod that can't be verified without a second live client.
+		private void SyncToNetwork(Point16 anchor)
+		{
+			NetMessage.SendTileSquare(Main.myPlayer, anchor.X, anchor.Y, Width, Height);
+
+			foreach (KeyValuePair<Point16, ChestData> entry in _chests)
+			{
+				int worldX = anchor.X + entry.Key.X;
+				int worldY = anchor.Y + entry.Key.Y;
+				int chestIndex = Chest.FindChest(worldX, worldY);
+				if (chestIndex == -1)
+					continue;
+
+				for (int slot = 0; slot < Chest.maxItems; slot++)
+					NetMessage.SendData(MessageID.SyncChestItem, -1, -1, null, chestIndex, slot);
+			}
+
+			foreach (KeyValuePair<Point16, string> entry in _signs)
+			{
+				int worldX = anchor.X + entry.Key.X;
+				int worldY = anchor.Y + entry.Key.Y;
+				int signIndex = FindSign(worldX, worldY);
+				if (signIndex != -1)
+					NetMessage.SendData(MessageID.SignText, -1, -1, null, signIndex);
+			}
+
+			foreach (KeyValuePair<Point16, (Type Type, byte[] Data)> entry in _tileEntities)
+			{
+				int worldX = anchor.X + entry.Key.X;
+				int worldY = anchor.Y + entry.Key.Y;
+				if (TileEntity.ByPosition.TryGetValue(new Point16(worldX, worldY), out TileEntity entity))
+					NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, entity.ID);
+			}
 		}
 
 		// Vanilla tile/wall IDs are stable across worlds, so raw netIDs are fine there. Chest items go through
