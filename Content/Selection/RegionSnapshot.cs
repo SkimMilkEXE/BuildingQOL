@@ -268,7 +268,7 @@ namespace BuildingQOL.Content.Selection
 				int worldY = anchor.Y + entry.Key.Y;
 				int signIndex = FindSign(worldX, worldY);
 				if (signIndex != -1)
-					NetMessage.SendData(MessageID.SignText, -1, -1, null, signIndex);
+					NetMessage.SendData(MessageID.ReadSign, -1, -1, null, signIndex);
 			}
 
 			foreach (KeyValuePair<Point16, (Type Type, byte[] Data)> entry in _tileEntities)
