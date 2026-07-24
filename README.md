@@ -32,6 +32,7 @@ Rebindable in-game via Settings > Controls.
 | `Y` | Redo |
 | `S` | Save schematic to file |
 | `L` | Load schematic from file |
+| `H` | Toggle cursor tile highlight |
 
 ## Roadmap
 

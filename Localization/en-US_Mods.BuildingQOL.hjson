@@ -8,6 +8,9 @@ Keybinds: {
 	"Toggle Tile Grid.DisplayName": Toggle  Tile  Grid
 	Redo.DisplayName: Redo
 	Undo.DisplayName: Undo
+	"Load Schematic From File.DisplayName": Load  Schematic  From  File
+	"Save Schematic To File.DisplayName": Save  Schematic  To  File
+	"Toggle Cursor Highlight.DisplayName": Toggle  Cursor  Highlight
 }
 
 Configs: {

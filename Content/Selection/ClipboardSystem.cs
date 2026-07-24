@@ -40,6 +40,11 @@ namespace BuildingQOL.Content.Selection
 			_clipboard = null;
 		}
 
+		// The in-memory clipboard came from a specific world; drop it on world switch (file save/load is unaffected).
+		public override void OnWorldLoad() => Clear();
+
+		public override void OnWorldUnload() => Clear();
+
 		public static void Clear()
 		{
 			_clipboard = null;
@@ -53,7 +58,7 @@ namespace BuildingQOL.Content.Selection
 
 			Vector2 topLeft = new Vector2(Terraria.Player.tileTargetX * 16, Terraria.Player.tileTargetY * 16) - Main.screenPosition;
 
-			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
+			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 			Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Rectangle((int)topLeft.X, (int)topLeft.Y, _width * 16, _height * 16), Color.LimeGreen * 0.35f);
 			Main.spriteBatch.End();
 		}

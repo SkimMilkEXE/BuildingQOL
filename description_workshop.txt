@@ -31,6 +31,7 @@ A WorldEdit-style selection and copy/paste tool for builders.
 [*] Y - Redo
 [*] S - Save schematic to file
 [*] L - Load schematic from file
+[*] H - Toggle cursor tile highlight
 [/list]
 
 [h2]Notes[/h2]

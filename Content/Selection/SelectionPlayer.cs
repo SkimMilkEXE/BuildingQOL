@@ -48,6 +48,9 @@ namespace BuildingQOL.Content.Selection
 			if (GridSystem.ToggleKeybind.JustPressed)
 				GridSystem.Enabled = !GridSystem.Enabled;
 
+			if (SelectionSystem.ToggleCursorHighlightKeybind.JustPressed)
+				SelectionSystem.CursorHighlightEnabled = !SelectionSystem.CursorHighlightEnabled;
+
 			if (UndoSystem.UndoKeybind.JustPressed)
 				UndoSystem.Undo();
 

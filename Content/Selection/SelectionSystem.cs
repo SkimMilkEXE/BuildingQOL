@@ -18,6 +18,9 @@ namespace BuildingQOL.Content.Selection
 		public static ModKeybind SetCorner2Keybind;
 		public static ModKeybind ClearSelectionKeybind;
 		public static ModKeybind EraseSelectionKeybind;
+		public static ModKeybind ToggleCursorHighlightKeybind;
+
+		public static bool CursorHighlightEnabled = true;
 
 		public override void Load()
 		{
@@ -25,6 +28,7 @@ namespace BuildingQOL.Content.Selection
 			SetCorner2Keybind = KeybindLoader.RegisterKeybind(Mod, "Set Selection Corner 2", "OemCloseBrackets");
 			ClearSelectionKeybind = KeybindLoader.RegisterKeybind(Mod, "Clear Selection", "Back");
 			EraseSelectionKeybind = KeybindLoader.RegisterKeybind(Mod, "Erase Selection Tiles", "Delete");
+			ToggleCursorHighlightKeybind = KeybindLoader.RegisterKeybind(Mod, "Toggle Cursor Highlight", "H");
 		}
 
 		public override void Unload()
@@ -33,6 +37,20 @@ namespace BuildingQOL.Content.Selection
 			SetCorner2Keybind = null;
 			ClearSelectionKeybind = null;
 			EraseSelectionKeybind = null;
+			ToggleCursorHighlightKeybind = null;
+			Corner1 = null;
+			Corner2 = null;
+		}
+
+		// Selection corners point at tile coordinates in the world they were set in; stale on world switch.
+		public override void OnWorldLoad()
+		{
+			Corner1 = null;
+			Corner2 = null;
+		}
+
+		public override void OnWorldUnload()
+		{
 			Corner1 = null;
 			Corner2 = null;
 		}
@@ -79,9 +97,10 @@ namespace BuildingQOL.Content.Selection
 		{
 			Texture2D pixel = TextureAssets.MagicPixel.Value;
 
-			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
+			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-			DrawCursorHighlight(pixel);
+			if (CursorHighlightEnabled)
+				DrawCursorHighlight(pixel);
 
 			// While only corner 1 is set, the outline follows the mouse as a live preview to help line up corner 2.
 			if (Corner1 is Point16 c1)

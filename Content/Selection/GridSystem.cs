@@ -34,7 +34,7 @@ namespace BuildingQOL.Content.Selection
 			int tilesWide = Main.screenWidth / 16 + 2;
 			int tilesHigh = Main.screenHeight / 16 + 2;
 
-			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
+			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
 			for (int x = 0; x <= tilesWide; x++)
 			{

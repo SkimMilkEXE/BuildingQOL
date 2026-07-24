@@ -31,6 +31,17 @@ namespace BuildingQOL.Content.Selection
 		{
 			UndoKeybind = null;
 			RedoKeybind = null;
+			Clear();
+		}
+
+		// History holds snapshots of a specific world's terrain; applying it after switching worlds would
+		// stamp the old world's tiles onto the new one at matching coordinates.
+		public override void OnWorldLoad() => Clear();
+
+		public override void OnWorldUnload() => Clear();
+
+		public static void Clear()
+		{
 			_undoStack.Clear();
 			_redoStack.Clear();
 		}
