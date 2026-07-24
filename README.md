@@ -14,6 +14,7 @@ A tModLoader mod that adds building quality of life features — currently a Wor
 - Save/load the clipboard to a file, so a schematic can be carried into a different world
 - Optional tile grid overlay for precise alignment
 - Mod config for outline color/thickness and auto-reframe on paste
+- `/blockswap <from> <to>` chat command to replace one tile/wall/liquid type with another inside the selection
 
 ## Default keybinds
 
@@ -33,6 +34,13 @@ Rebindable in-game via Settings > Controls.
 | `S` | Save schematic to file |
 | `L` | Load schematic from file |
 | `H` | Toggle cursor tile highlight |
+
+## Commands
+
+| Command | Action |
+|---------|--------|
+| `/blockswap <from> <to>` | Replace one tile, wall, or liquid type with another inside the current selection. Uses exact internal IDs (e.g. `WoodBlock`, not `Wood`), or `water`/`lava`/`honey` for liquids. |
+| `/tilename` | Reports the tile/wall/liquid internal ID names under your cursor, for use with `/blockswap`. |
 
 ## Roadmap
 
