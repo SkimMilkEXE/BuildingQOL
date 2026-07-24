@@ -61,7 +61,11 @@ namespace BuildingQOL.Content.Selection
 						continue;
 
 					WorldGen.KillTile(x, y, noItem: true);
-					WorldGen.KillWall(x, y);
+
+					// WorldGen.KillWall has no noItem option and always drops an item; clear the wall field directly instead.
+					Tile tile = Main.tile[x, y];
+					tile.WallType = 0;
+					tile.WallColor = 0;
 				}
 			}
 
