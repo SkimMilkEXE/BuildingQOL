@@ -39,6 +39,12 @@ namespace BuildingQOL.Content.Selection
 			if (ClipboardSystem.PasteKeybind.JustPressed)
 				ClipboardSystem.Paste(targetTile);
 
+			if (ClipboardSystem.SaveKeybind.JustPressed)
+				ClipboardSystem.SaveToFile();
+
+			if (ClipboardSystem.LoadKeybind.JustPressed)
+				ClipboardSystem.LoadFromFile();
+
 			if (GridSystem.ToggleKeybind.JustPressed)
 				GridSystem.Enabled = !GridSystem.Enabled;
 

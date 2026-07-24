@@ -1,3 +1,4 @@
+using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -8,25 +9,34 @@ using Terraria.ModLoader;
 namespace BuildingQOL.Content.Selection
 {
 	// Copy/paste within the same world: tiles, walls, chests, signs, and other tile entities.
+	// Also save/load the clipboard to a file so a schematic can travel to a different world.
 	public class ClipboardSystem : ModSystem
 	{
 		public static ModKeybind CopyKeybind;
 		public static ModKeybind PasteKeybind;
+		public static ModKeybind SaveKeybind;
+		public static ModKeybind LoadKeybind;
 
 		private static RegionSnapshot _clipboard;
 		private static int _width;
 		private static int _height;
 
+		private static string SchematicPath => Path.Combine(Main.SavePath, "Schematics", "BuildingQOL", "clipboard.bqol");
+
 		public override void Load()
 		{
 			CopyKeybind = KeybindLoader.RegisterKeybind(Mod, "Copy Selection", "C");
 			PasteKeybind = KeybindLoader.RegisterKeybind(Mod, "Paste Selection", "V");
+			SaveKeybind = KeybindLoader.RegisterKeybind(Mod, "Save Schematic To File", "S");
+			LoadKeybind = KeybindLoader.RegisterKeybind(Mod, "Load Schematic From File", "L");
 		}
 
 		public override void Unload()
 		{
 			CopyKeybind = null;
 			PasteKeybind = null;
+			SaveKeybind = null;
+			LoadKeybind = null;
 			_clipboard = null;
 		}
 
@@ -68,6 +78,25 @@ namespace BuildingQOL.Content.Selection
 			RegionSnapshot before = RegionSnapshot.Capture(anchor.X, anchor.Y, _width, _height);
 			_clipboard.Apply(anchor);
 			UndoSystem.Record(anchor, before, RegionSnapshot.Capture(anchor.X, anchor.Y, _width, _height));
+		}
+
+		// Single fixed save slot; rename/move the file outside the game to keep more than one schematic.
+		public static void SaveToFile()
+		{
+			if (_clipboard == null)
+				return;
+
+			_clipboard.Save(SchematicPath);
+		}
+
+		public static void LoadFromFile()
+		{
+			if (!File.Exists(SchematicPath))
+				return;
+
+			_clipboard = RegionSnapshot.Load(SchematicPath);
+			_width = _clipboard.Width;
+			_height = _clipboard.Height;
 		}
 	}
 }

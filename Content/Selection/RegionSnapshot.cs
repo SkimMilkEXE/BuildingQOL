@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.Tile_Entities;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 
 namespace BuildingQOL.Content.Selection
 {
@@ -72,6 +74,19 @@ namespace BuildingQOL.Content.Selection
 			if (type == typeof(TETeleportationPylon)) return TETeleportationPylon.Place(x, y);
 			return -1;
 		}
+
+		private static Type TileEntityTypeFromName(string name) => name switch
+		{
+			nameof(TEItemFrame) => typeof(TEItemFrame),
+			nameof(TEWeaponsRack) => typeof(TEWeaponsRack),
+			nameof(TEFoodPlatter) => typeof(TEFoodPlatter),
+			nameof(TEHatRack) => typeof(TEHatRack),
+			nameof(TEDisplayDoll) => typeof(TEDisplayDoll),
+			nameof(TETrainingDummy) => typeof(TETrainingDummy),
+			nameof(TELogicSensor) => typeof(TELogicSensor),
+			nameof(TETeleportationPylon) => typeof(TETeleportationPylon),
+			_ => null,
+		};
 
 		// includeChestItems is false for the clipboard so copy/paste can't duplicate items; undo/redo always needs
 		// full fidelity since it's restoring exactly what a paste/erase changed, not cloning anything new.
@@ -224,6 +239,140 @@ namespace BuildingQOL.Content.Selection
 				using var reader = new BinaryReader(stream);
 				newEntity.ReadExtraData(reader, true);
 			}
+		}
+
+		// Vanilla tile/wall IDs are stable across worlds, so raw netIDs are fine there. Chest items go through
+		// ItemIO/TagCompound instead so modded items survive being loaded into a different mod list.
+		// ponytail: tile/wall netIDs for modded content aren't remapped by name, only reliable within the same mod list.
+		private TagCompound ToTag()
+		{
+			var tileBytes = new byte[Width * Height * 15];
+			using (var stream = new MemoryStream(tileBytes))
+			using (var writer = new BinaryWriter(stream))
+			{
+				for (int x = 0; x < Width; x++)
+				{
+					for (int y = 0; y < Height; y++)
+					{
+						TileData data = _tiles[x, y];
+						writer.Write(data.HasTile);
+						writer.Write(data.TileType);
+						writer.Write(data.FrameX);
+						writer.Write(data.FrameY);
+						writer.Write(data.HalfBrick);
+						writer.Write((byte)data.Slope);
+						writer.Write(data.TileColor);
+						writer.Write(data.WallType);
+						writer.Write(data.WallColor);
+					}
+				}
+			}
+
+			var chests = _chests.Select(entry => new TagCompound
+			{
+				["X"] = (int)entry.Key.X,
+				["Y"] = (int)entry.Key.Y,
+				["Name"] = entry.Value.Name ?? "",
+				["HasItems"] = entry.Value.Items != null,
+				["Items"] = entry.Value.Items?.Select(item => ItemIO.Save(item)).ToList() ?? new List<TagCompound>(),
+			}).ToList();
+
+			var signs = _signs.Select(entry => new TagCompound
+			{
+				["X"] = (int)entry.Key.X,
+				["Y"] = (int)entry.Key.Y,
+				["Text"] = entry.Value,
+			}).ToList();
+
+			var entities = _tileEntities.Select(entry => new TagCompound
+			{
+				["X"] = (int)entry.Key.X,
+				["Y"] = (int)entry.Key.Y,
+				["TypeName"] = entry.Value.Type.Name,
+				["Data"] = entry.Value.Data,
+			}).ToList();
+
+			return new TagCompound
+			{
+				["Width"] = Width,
+				["Height"] = Height,
+				["Tiles"] = tileBytes,
+				["Chests"] = chests,
+				["Signs"] = signs,
+				["Entities"] = entities,
+			};
+		}
+
+		private static RegionSnapshot FromTag(TagCompound tag)
+		{
+			int width = tag.Get<int>("Width");
+			int height = tag.Get<int>("Height");
+			var snapshot = new RegionSnapshot(width, height);
+
+			byte[] tileBytes = tag.Get<byte[]>("Tiles");
+			using (var stream = new MemoryStream(tileBytes))
+			using (var reader = new BinaryReader(stream))
+			{
+				for (int x = 0; x < width; x++)
+				{
+					for (int y = 0; y < height; y++)
+					{
+						snapshot._tiles[x, y] = new TileData
+						{
+							HasTile = reader.ReadBoolean(),
+							TileType = reader.ReadUInt16(),
+							FrameX = reader.ReadInt16(),
+							FrameY = reader.ReadInt16(),
+							HalfBrick = reader.ReadBoolean(),
+							Slope = (SlopeType)reader.ReadByte(),
+							TileColor = reader.ReadByte(),
+							WallType = reader.ReadUInt16(),
+							WallColor = reader.ReadByte(),
+						};
+					}
+				}
+			}
+
+			foreach (TagCompound chestTag in tag.Get<List<TagCompound>>("Chests"))
+			{
+				var pos = new Point16((short)chestTag.Get<int>("X"), (short)chestTag.Get<int>("Y"));
+				Item[] items = chestTag.Get<bool>("HasItems")
+					? chestTag.Get<List<TagCompound>>("Items").Select(ItemIO.Load).ToArray()
+					: null;
+
+				snapshot._chests[pos] = new ChestData { Name = chestTag.Get<string>("Name"), Items = items };
+			}
+
+			foreach (TagCompound signTag in tag.Get<List<TagCompound>>("Signs"))
+			{
+				var pos = new Point16((short)signTag.Get<int>("X"), (short)signTag.Get<int>("Y"));
+				snapshot._signs[pos] = signTag.Get<string>("Text");
+			}
+
+			foreach (TagCompound entityTag in tag.Get<List<TagCompound>>("Entities"))
+			{
+				Type type = TileEntityTypeFromName(entityTag.Get<string>("TypeName"));
+				if (type == null)
+					continue;
+
+				var pos = new Point16((short)entityTag.Get<int>("X"), (short)entityTag.Get<int>("Y"));
+				snapshot._tileEntities[pos] = (type, entityTag.Get<byte[]>("Data"));
+			}
+
+			return snapshot;
+		}
+
+		public void Save(string path)
+		{
+			Directory.CreateDirectory(Path.GetDirectoryName(path));
+			using FileStream stream = File.Create(path);
+			TagIO.ToStream(ToTag(), stream);
+		}
+
+		public static RegionSnapshot Load(string path)
+		{
+			using FileStream stream = File.OpenRead(path);
+			return FromTag(TagIO.FromStream(stream));
 		}
 	}
 }
