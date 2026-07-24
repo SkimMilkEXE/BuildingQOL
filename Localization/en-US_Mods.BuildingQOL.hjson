@@ -6,6 +6,8 @@ Keybinds: {
 	"Copy Selection.DisplayName": Copy  Selection
 	"Erase Selection Tiles.DisplayName": Erase  Selection  Tiles
 	"Toggle Tile Grid.DisplayName": Toggle  Tile  Grid
+	Redo.DisplayName: Redo
+	Undo.DisplayName: Undo
 }
 
 Configs: {

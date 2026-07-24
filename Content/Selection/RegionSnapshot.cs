@@ -145,7 +145,11 @@ namespace BuildingQOL.Content.Selection
 					if (oldSignIndex != -1)
 						Main.sign[oldSignIndex] = null;
 
-					TileEntity.Kill(worldX, worldY);
+					if (TileEntity.ByPosition.TryGetValue(new Point16(worldX, worldY), out TileEntity existingEntity))
+					{
+						TileEntity.ByPosition.Remove(new Point16(worldX, worldY));
+						TileEntity.ByID.Remove(existingEntity.ID);
+					}
 
 					TileData data = _tiles[x, y];
 					Tile tile = Main.tile[worldX, worldY];
