@@ -11,6 +11,7 @@ A tModLoader mod that adds building quality of life features — currently a Wor
 - Copy/paste chest contents, sign text, and other tile entities (item frames, weapon racks, display dolls, hat racks, food platters, logic sensors, training dummies, pylons) along with their tiles
 - Erase all tiles/walls inside a selection
 - Undo/redo for paste and erase, up to 50 actions back
+- Save/load the clipboard to a file, so a schematic can be carried into a different world
 - Optional tile grid overlay for precise alignment
 - Mod config for outline color/thickness and auto-reframe on paste
 
@@ -29,6 +30,8 @@ Rebindable in-game via Settings > Controls.
 | `G` | Toggle grid overlay |
 | `Z` | Undo |
 | `Y` | Redo |
+| `S` | Save schematic to file |
+| `L` | Load schematic from file |
 
 ## Roadmap
 
@@ -36,5 +39,5 @@ Rebindable in-game via Settings > Controls.
 2. ~~Copy/paste within the same world, tiles only~~
 3. ~~Tile entity support (chests, signs)~~
 4. ~~Undo/Redo~~
-5. Save/load to file for cross-world portability
+5. ~~Save/load to file for cross-world portability~~
 6. Multiplayer sync

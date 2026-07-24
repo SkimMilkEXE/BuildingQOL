@@ -12,3 +12,5 @@ V - Paste at cursor
 G - Toggle grid overlay
 Z - Undo
 Y - Redo
+S - Save schematic to file
+L - Load schematic from file

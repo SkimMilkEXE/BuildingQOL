@@ -12,6 +12,7 @@ A WorldEdit-style selection and copy/paste tool for builders.
 [*] Ghost preview showing exactly where a paste will land before you commit
 [*] Erase all tiles/walls inside a selection in one keypress
 [*] Undo/redo for paste and erase, up to 50 actions back
+[*] Save/load the clipboard to a file, so a schematic can be carried into a different world
 [*] Optional full-screen tile grid overlay for precise alignment
 [*] Mod config for outline color/thickness and auto-reframe on paste
 [/list]
@@ -28,10 +29,12 @@ A WorldEdit-style selection and copy/paste tool for builders.
 [*] G - Toggle grid overlay
 [*] Z - Undo
 [*] Y - Redo
+[*] S - Save schematic to file
+[*] L - Load schematic from file
 [/list]
 
 [h2]Notes[/h2]
-Save/load to file and multiplayer sync aren't supported yet. More to come.
+Multiplayer sync isn't supported yet. More to come.
 
 [h2]Links[/h2]
 [list]
