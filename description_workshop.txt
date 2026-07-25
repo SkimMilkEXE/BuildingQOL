@@ -34,6 +34,14 @@ A WorldEdit-style selection and copy/paste tool for builders.
 [*] H - Toggle cursor tile highlight
 [/list]
 
+[h2]Commands[/h2]
+(type in chat)
+[list]
+[*] /blockswap <from> <to> - Replace one tile/wall/liquid type with another inside your selection (e.g. /blockswap WoodBlock RichMahogany, or /blockswap water lava)
+[*] /tilename - Reports the tile/wall/liquid ID names under your cursor, for use with /blockswap
+[*] /qolhelp - Lists all BuildingQOL commands and what they do
+[/list]
+
 [h2]Notes[/h2]
 Multiplayer sync is in but still early — report any desync you hit.
 
