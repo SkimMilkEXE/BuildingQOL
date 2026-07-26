@@ -40,12 +40,3 @@ Rebindable in-game via Settings > Controls.
 | `/blockswap <from> <to>` | Replace one tile, wall, or liquid type with another inside the current selection. Uses exact internal IDs (e.g. `WoodBlock`, not `Wood`), or `water`/`lava`/`honey` for liquids. |
 | `/tilename` | Reports the tile/wall/liquid internal ID names under your cursor, for use with `/blockswap`. |
 | `/qolhelp` | Lists all BuildingQOL commands and what they do. |
-
-## Roadmap
-
-1. ~~Selection tool + visual outline~~
-2. ~~Copy/paste within the same world, tiles only~~
-3. ~~Tile entity support (chests, signs)~~
-4. ~~Undo/Redo~~
-5. ~~Save/load to file for cross-world portability~~
-6. ~~Multiplayer sync~~ (implemented, needs testing with a second client)
