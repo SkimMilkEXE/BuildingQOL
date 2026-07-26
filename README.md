@@ -1,7 +1,5 @@
 # BuildingQOL
 
-🚧 **Under development** — not yet released, features and keybinds may change.
-
 A tModLoader mod that adds building quality of life features — currently a WorldEdit-style selection and copy/paste tool.
 
 ## Features
