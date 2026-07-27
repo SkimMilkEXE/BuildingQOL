@@ -40,6 +40,7 @@ A WorldEdit-style selection and copy/paste tool for builders.
 [*] /blockswap <from> <to> - Replace one tile/wall/liquid type with another inside your selection (e.g. /blockswap WoodBlock RichMahogany, or /blockswap water lava)
 [*] /fill <block> - Fill your entire selection with one tile/wall/liquid type (e.g. /fill StoneBlock, or /fill lava)
 [*] /drain - Remove all liquid in your selection, leaving tiles/walls untouched
+[*] /clear - Erase tiles, walls, and liquid in your selection (Erase + Drain combined)
 [*] /tilename - Reports the tile/wall/liquid ID names under your cursor, for use with /blockswap and /fill
 [*] /qolhelp - Lists all BuildingQOL commands and what they do
 [/list]
