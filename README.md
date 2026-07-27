@@ -38,7 +38,8 @@ Rebindable in-game via Settings > Controls.
 | Command | Action |
 |---------|--------|
 | `/fill <block>` | Fill the entire current selection with one tile, wall, or liquid type. |
-| `/blockswap <from> <to>` | Replace one tile, wall, or liquid type with another inside the current selection. Uses exact internal IDs (e.g. `WoodBlock`, not `Wood`), or `water`/`lava`/`honey` for liquids. |
+| `/floodfill <water\|lava\|honey\|shimmer>` | Fill only the open space in the selection with liquid, then let it settle naturally instead of staying a static block. |
+| `/blockswap <from> <to>` | Replace one tile, wall, or liquid type with another inside the current selection. Uses exact internal IDs (e.g. `WoodBlock`, not `Wood`), or `water`/`lava`/`honey`/`shimmer` for liquids. |
 | `/drain` | Remove all liquid in the current selection, leaving tiles/walls untouched. |
 | `/clear` | Erase tiles, walls, and liquid in the current selection (Erase + Drain combined). Undoes in two steps, not one. |
 | `/tilename` | Reports the tile/wall/liquid internal ID names under your cursor, for use with `/blockswap` and `/fill`. |

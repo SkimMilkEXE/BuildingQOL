@@ -11,6 +11,7 @@ namespace BuildingQOL.Content.Commands
 			("water", LiquidID.Water),
 			("lava", LiquidID.Lava),
 			("honey", LiquidID.Honey),
+			("shimmer", LiquidID.Shimmer),
 		};
 
 		public static bool TryGetId(string name, out int id)

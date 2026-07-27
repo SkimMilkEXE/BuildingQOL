@@ -15,6 +15,7 @@ namespace BuildingQOL.Content.Commands
 		{
 			("/blockswap <from> <to>", "Replace one tile/wall/liquid type with another inside your selection."),
 			("/fill <block>", "Fill your entire selection with one tile/wall/liquid type."),
+			("/floodfill <liquid>", "Fill the open space in your selection with liquid, then let it settle naturally."),
 			("/drain", "Remove all liquid in your selection, leaving tiles/walls untouched."),
 			("/clear", "Erase tiles, walls, and liquid in your selection (Erase + Drain combined)."),
 			("/tilename", "Reports the tile/wall/liquid ID names under your cursor."),
