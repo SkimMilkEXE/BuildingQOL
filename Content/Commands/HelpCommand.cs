@@ -14,6 +14,7 @@ namespace BuildingQOL.Content.Commands
 		private static readonly (string Usage, string Description)[] Commands =
 		{
 			("/blockswap <from> <to>", "Replace one tile/wall/liquid type with another inside your selection."),
+			("/fill <block>", "Fill your entire selection with one tile/wall/liquid type."),
 			("/tilename", "Reports the tile/wall/liquid ID names under your cursor."),
 		};
 
