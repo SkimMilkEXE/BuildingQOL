@@ -10,7 +10,9 @@ namespace BuildingQOL.Content.Commands
 	// Shared "loop the selection, mutate matching tiles, reframe, record undo, sync" used by /blockswap and /fill.
 	internal static class RegionMutator
 	{
-		public static void Apply(Point16 c1, Point16 c2, Predicate<Tile> matches, Action<Tile> apply)
+		// Returns how many tiles matched, so callers can report back (e.g. "0 matched" points at a resolution
+		// bug rather than a rendering one).
+		public static int Apply(Point16 c1, Point16 c2, Predicate<Tile> matches, Action<Tile> apply)
 		{
 			int minX = Math.Min(c1.X, c2.X);
 			int maxX = Math.Max(c1.X, c2.X);
@@ -22,6 +24,7 @@ namespace BuildingQOL.Content.Commands
 
 			RegionSnapshot before = RegionSnapshot.Capture(minX, minY, width, height);
 
+			int matchCount = 0;
 			for (int x = minX; x <= maxX; x++)
 			{
 				for (int y = minY; y <= maxY; y++)
@@ -31,7 +34,10 @@ namespace BuildingQOL.Content.Commands
 
 					Tile tile = Main.tile[x, y];
 					if (matches(tile))
+					{
 						apply(tile);
+						matchCount++;
+					}
 				}
 			}
 
@@ -42,6 +48,8 @@ namespace BuildingQOL.Content.Commands
 
 			if (Main.netMode != NetmodeID.SinglePlayer)
 				NetMessage.SendTileSquare(Main.myPlayer, minX, minY, width, height);
+
+			return matchCount;
 		}
 	}
 }

@@ -29,7 +29,7 @@ namespace BuildingQOL.Content.Commands
 
 			string name = args[0];
 
-			if (TileID.Search.TryGetId(name, out int tileId))
+			if (IdSearch.TryGetTileId(name, out int tileId))
 			{
 				RegionMutator.Apply(c1, c2, _ => true, tile =>
 				{
@@ -44,7 +44,7 @@ namespace BuildingQOL.Content.Commands
 				return;
 			}
 
-			if (WallID.Search.TryGetId(name, out int wallId))
+			if (IdSearch.TryGetWallId(name, out int wallId))
 			{
 				RegionMutator.Apply(c1, c2, _ => true, tile => tile.WallType = (ushort)wallId);
 				caller.Reply($"Filled selection with wall {name}.");

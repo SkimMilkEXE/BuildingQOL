@@ -1,6 +1,5 @@
 using BuildingQOL.Content.Selection;
 using Terraria.DataStructures;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace BuildingQOL.Content.Commands
@@ -29,30 +28,30 @@ namespace BuildingQOL.Content.Commands
 
 			if (TryResolveTile(args[0], out int fromTile) && TryResolveTile(args[1], out int toTile))
 			{
-				RegionMutator.Apply(c1, c2, tile => tile.HasTile && tile.TileType == fromTile, tile => tile.TileType = (ushort)toTile);
-				caller.Reply($"Swapped tile {args[0]} -> {args[1]} in selection.");
+				int count = RegionMutator.Apply(c1, c2, tile => tile.HasTile && tile.TileType == fromTile, tile => tile.TileType = (ushort)toTile);
+				caller.Reply($"Swapped {count} tile(s) {args[0]} -> {args[1]} in selection.");
 				return;
 			}
 
 			if (TryResolveWall(args[0], out int fromWall) && TryResolveWall(args[1], out int toWall))
 			{
-				RegionMutator.Apply(c1, c2, tile => tile.WallType == fromWall, tile => tile.WallType = (ushort)toWall);
-				caller.Reply($"Swapped wall {args[0]} -> {args[1]} in selection.");
+				int count = RegionMutator.Apply(c1, c2, tile => tile.WallType == fromWall, tile => tile.WallType = (ushort)toWall);
+				caller.Reply($"Swapped {count} wall(s) {args[0]} -> {args[1]} in selection.");
 				return;
 			}
 
 			if (TryResolveLiquid(args[0], out int fromLiquid) && TryResolveLiquid(args[1], out int toLiquid))
 			{
-				RegionMutator.Apply(c1, c2, tile => tile.LiquidAmount > 0 && tile.LiquidType == fromLiquid, tile => tile.LiquidType = (byte)toLiquid);
-				caller.Reply($"Swapped liquid {args[0]} -> {args[1]} in selection.");
+				int count = RegionMutator.Apply(c1, c2, tile => tile.LiquidAmount > 0 && tile.LiquidType == fromLiquid, tile => tile.LiquidType = (byte)toLiquid);
+				caller.Reply($"Swapped {count} liquid tile(s) {args[0]} -> {args[1]} in selection.");
 				return;
 			}
 
 			caller.Reply($"Couldn't match '{args[0]}' and '{args[1]}' as a tile, wall, or liquid pair. Use exact internal IDs (e.g. WoodBlock, not Wood).");
 		}
 
-		private static bool TryResolveTile(string name, out int id) => TileID.Search.TryGetId(name, out id);
-		private static bool TryResolveWall(string name, out int id) => WallID.Search.TryGetId(name, out id);
+		private static bool TryResolveTile(string name, out int id) => IdSearch.TryGetTileId(name, out id);
+		private static bool TryResolveWall(string name, out int id) => IdSearch.TryGetWallId(name, out id);
 		private static bool TryResolveLiquid(string name, out int id) => LiquidLookup.TryGetId(name, out id);
 	}
 }
