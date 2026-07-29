@@ -11,6 +11,7 @@ Keybinds: {
 	"Load Schematic From File.DisplayName": Load  Schematic  From  File
 	"Save Schematic To File.DisplayName": Save  Schematic  To  File
 	"Toggle Cursor Highlight.DisplayName": Toggle  Cursor  Highlight
+	"Cycle Terrain Wand Mode.DisplayName": Cycle  Terrain  Wand  Mode
 }
 
 Configs: {
@@ -31,5 +32,26 @@ Configs: {
 		}
 
 		DisplayName: Building Q O L Config
+
+		TerrainStepAmount: {
+			Tooltip: How many tiles Raise/Lower shifts terrain by per use
+			Label: Terrain Wand step amount
+		}
+
+		TerrainBrushRadius: {
+			Tooltip: How many columns on each side of your cursor the Terrain Wand affects per use
+			Label: Terrain Wand brush radius
+		}
+	}
+}
+
+Items: {
+	TerrainWand: {
+		Tooltip: '''
+			Sculpts terrain in a strip around your cursor
+			Left click to apply the current mode
+			Cycle Raise / Lower / Smooth / Roughen with its keybind
+			'''
+		DisplayName: Terrain Wand
 	}
 }
