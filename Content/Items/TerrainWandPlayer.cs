@@ -9,8 +9,11 @@ namespace BuildingQOL.Content.Items
 {
 	public class TerrainWandPlayer : ModPlayer
 	{
-		public override IEnumerable<Item> AddStartingItems()
+		public override IEnumerable<Item> AddStartingItems(bool mediumCoreDeath)
 		{
+			if (mediumCoreDeath)
+				return Array.Empty<Item>();
+
 			return new List<Item> { new Item(ModContent.ItemType<TerrainWand>()) };
 		}
 
