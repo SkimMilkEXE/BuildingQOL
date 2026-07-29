@@ -32,6 +32,16 @@ A WorldEdit-style selection and copy/paste tool for builders.
 [*] S - Save schematic to file
 [*] L - Load schematic from file
 [*] H - Toggle cursor tile highlight
+[*] M - Cycle Terrain Wand mode (Raise/Lower/Smooth/Roughen)
+[/list]
+
+[h2]Terrain Wand[/h2]
+A tool for sculpting terrain, separate from the selection system. New characters spawn with one, or craft it from 10 Wood at a Work Bench if lost. Left-click near the ground to apply the current mode to a strip of terrain centered on your cursor:
+[list]
+[*] Raise - extends the ground upward
+[*] Lower - digs the ground down
+[*] Smooth - evens out jagged terrain
+[*] Roughen - adds natural-looking variation
 [/list]
 
 [h2]Commands[/h2]

@@ -15,6 +15,9 @@ Y - Redo
 S - Save schematic to file
 L - Load schematic from file
 H - Toggle cursor tile highlight
+M - Cycle Terrain Wand mode (Raise/Lower/Smooth/Roughen)
+
+Terrain Wand: a tool for sculpting terrain, not tied to a selection. New characters spawn with one, or craft it from 10 Wood at a Work Bench. Left-click near the ground to Raise, Lower, Smooth, or Roughen a strip of terrain centered on your cursor, depending on the current mode.
 
 Commands (type in chat):
 /blockswap <from> <to> - Replace one tile/wall/liquid type with another inside your selection (e.g. /blockswap WoodBlock RichMahogany, or /blockswap water lava)
