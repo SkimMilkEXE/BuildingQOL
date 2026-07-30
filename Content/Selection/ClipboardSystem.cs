@@ -89,19 +89,27 @@ namespace BuildingQOL.Content.Selection
 		public static void SaveToFile()
 		{
 			if (_clipboard == null)
+			{
+				Main.NewText("Nothing copied yet - press C to copy a selection first.", Color.OrangeRed);
 				return;
+			}
 
 			_clipboard.Save(SchematicPath);
+			Main.NewText($"Saved {_width}x{_height} schematic to file.", Color.LimeGreen);
 		}
 
 		public static void LoadFromFile()
 		{
 			if (!File.Exists(SchematicPath))
+			{
+				Main.NewText("No saved schematic file found.", Color.OrangeRed);
 				return;
+			}
 
 			_clipboard = RegionSnapshot.Load(SchematicPath);
 			_width = _clipboard.Width;
 			_height = _clipboard.Height;
+			Main.NewText($"Loaded {_width}x{_height} schematic from file - press V to paste.", Color.LimeGreen);
 		}
 	}
 }

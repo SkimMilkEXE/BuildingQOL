@@ -47,7 +47,8 @@ Configs: {
 
 Items: {
 	TerrainWand: {
-		Tooltip: '''
+		Tooltip:
+			'''
 			Sculpts terrain in a strip around your cursor
 			Left click to apply the current mode
 			Cycle Raise / Lower / Smooth / Roughen with its keybind
