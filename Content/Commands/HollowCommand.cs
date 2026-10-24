@@ -20,7 +20,7 @@ namespace BuildingQOL.Content.Commands
 		{
 			if (SelectionSystem.Corner1 is not Point16 c1 || SelectionSystem.Corner2 is not Point16 c2)
 			{
-				caller.Reply("No selection set. Use [ and ] to set one first.");
+				Chat.Error("No selection set. Use [ and ] to set one first.");
 				return;
 			}
 
@@ -28,7 +28,7 @@ namespace BuildingQOL.Content.Commands
 			int lastY = Math.Abs(c1.Y - c2.Y);
 			if (lastX < 2 || lastY < 2)
 			{
-				caller.Reply("Selection is too small to hollow - it needs to be at least 3x3.");
+				Chat.Error("Selection is too small to hollow - it needs to be at least 3x3.");
 				return;
 			}
 
@@ -41,7 +41,7 @@ namespace BuildingQOL.Content.Commands
 					tile.IsHalfBlock = false;
 					tile.Slope = SlopeType.Solid;
 				});
-			caller.Reply($"Hollowed out {count} block(s) in selection.");
+			Chat.Success($"Hollowed out {count} block(s) in selection.");
 		}
 	}
 }

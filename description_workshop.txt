@@ -1,65 +1,73 @@
 [h1]Building Quality of Life[/h1]
-[b] Under development — features and keybinds may change.
-
-A WorldEdit-style selection and copy/paste tool for builders.
+WorldEdit-style building tools for Terraria: select an area, copy, flip and paste it, save it as a schematic, and reshape it with chat commands. Everything can be undone.
 
 [h2]Features[/h2]
 [list]
-[*] Select a rectangular region with two corner keybinds
-[*] Live selection preview that follows your cursor before you lock in the second corner
-[*] Copy and paste tiles/walls (type, frame, slope, half-block, paint) within the same world
-[*] Copy and paste chest contents, sign text, and other tile entities (item frames, weapon racks, display dolls, hat racks, food platters, logic sensors, training dummies, pylons) along with their tiles
-[*] Ghost preview showing exactly where a paste will land before you commit
-[*] Erase all tiles/walls inside a selection in one keypress
-[*] Undo/redo for paste and erase, up to 50 actions back
-[*] Save/load the clipboard to a file, so a schematic can be carried into a different world
-[*] Optional full-screen tile grid overlay for precise alignment
-[*] Mod config for outline color/thickness and auto-reframe on paste
+[*][b]Selection[/b] - mark two corners with [ and ]. A live outline, corner markers and a size label (e.g. 12 x 8) follow your cursor while you pick the second corner.
+[*][b]Copy and paste[/b] - copies tiles, walls, slopes, half blocks and paint, plus chest names, sign text, item frames, weapon racks, mannequins and other tile entities. Chest items are left out so nothing can be duplicated.
+[*][b]Paste preview[/b] - a see-through copy of the actual blocks, furniture and walls shows exactly where a paste will land before you press V.
+[*][b]Flip[/b] - mirror the clipboard horizontally (X) or vertically (/flip v). Beds, tables and other furniture stay in one piece.
+[*][b]Named schematics[/b] - /schem save castle stores a build to a file you can load into any world. Keep a whole library of builds.
+[*][b]Undo and redo[/b] - Z and Y, up to 50 actions back, for pastes, erases and every command.
+[*][b]Shape and fill commands[/b] - /fill, /outline, /hollow, /blockswap, /floodfill, /drain and /clear work on the whole selection at once.
+[*][b]Terrain Wand[/b] - sculpt hills and valleys around your cursor: Raise, Lower, Smooth and Roughen.
+[*][b]Grid and cursor highlight[/b] - optional tile grid overlay and cursor highlight for precise placement.
+[*][b]Multiplayer[/b] - changes sync to other players.
 [/list]
 
 [h2]Default Keybinds[/h2]
-(all rebindable in Settings > Controls)
+All rebindable in Settings > Controls.
 [list]
-[*] [ - Set selection corner 1
-[*] ] - Set selection corner 2
-[*] Backspace - Clear selection
-[*] Delete - Erase tiles/walls in selection
-[*] C - Copy selection
-[*] V - Paste at cursor
-[*] G - Toggle grid overlay
-[*] Z - Undo
-[*] Y - Redo
-[*] S - Save schematic to file
-[*] L - Load schematic from file
-[*] H - Toggle cursor tile highlight
-[*] M - Cycle Terrain Wand mode (Raise/Lower/Smooth/Roughen)
-[/list]
-
-[h2]Terrain Wand[/h2]
-A tool for sculpting terrain, separate from the selection system. New characters spawn with one, or craft it from 10 Wood at a Work Bench if lost. Left-click near the ground to apply the current mode to a strip of terrain centered on your cursor:
-[list]
-[*] Raise - extends the ground upward
-[*] Lower - digs the ground down
-[*] Smooth - evens out jagged terrain
-[*] Roughen - adds natural-looking variation
+[*][ / ] - Set selection corner 1 / corner 2
+[*]Backspace - Clear selection
+[*]Delete - Erase tiles and walls in selection
+[*]C - Copy selection
+[*]V - Paste at cursor
+[*]X - Flip clipboard horizontally
+[*]Z / Y - Undo / Redo
+[*]S / L - Save / load the default schematic slot
+[*]G - Toggle grid overlay
+[*]H - Toggle cursor highlight
+[*]M - Cycle Terrain Wand mode
 [/list]
 
 [h2]Commands[/h2]
-(type in chat)
+Type in chat. /qolhelp lists them all in-game.
 [list]
-[*] /blockswap <from> <to> - Replace one tile/wall/liquid type with another inside your selection (e.g. /blockswap WoodBlock RichMahogany, or /blockswap water lava)
-[*] /fill <block> - Fill your entire selection with one tile/wall/liquid type (e.g. /fill StoneBlock, or /fill lava)
-[*] /floodfill <water|lava|honey|shimmer> - Fill only the open space in your selection with liquid, then let it settle naturally
-[*] /drain - Remove all liquid in your selection, leaving tiles/walls untouched
-[*] /clear - Erase tiles, walls, and liquid in your selection (Erase + Drain combined)
-[*] /tilename - Reports the tile/wall/liquid ID names under your cursor, for use with /blockswap and /fill
-[*] /qolhelp - Lists all BuildingQOL commands and what they do
+[*]/fill <block> - fill the selection with a tile, wall or liquid (e.g. /fill StoneBlock, /fill lava)
+[*]/outline <block> - place a 1-tile border around the edge of the selection (e.g. /outline GrayBrick)
+[*]/hollow - remove the blocks inside the selection, keeping a 1-tile shell. Furniture and walls are kept.
+[*]/blockswap <from> <to> - replace one tile, wall or liquid with another (e.g. /blockswap WoodBlock RichMahogany)
+[*]/floodfill <water|lava|honey|shimmer> - fill the open space with liquid and let it settle
+[*]/drain - remove all liquid in the selection
+[*]/clear - erase tiles, walls and liquid in the selection
+[*]/flip <h|v> - flip the clipboard horizontally or vertically
+[*]/schem save|load|delete <name> - manage named schematics
+[*]/schem list - list your saved schematics
+[*]/tilename - show the internal names of the tile, wall and liquid under your cursor, for use with /fill and /blockswap
+[*]/qolhelp - list all commands
 [/list]
 
+[h2]Terrain Wand[/h2]
+New characters spawn with one, or craft it from 10 Wood at a Work Bench. Left-click (hold to repeat) to shape a strip of ground centered on your cursor:
+[list]
+[*]Raise - builds the ground up using the surface block, so it blends in
+[*]Lower - digs the ground down
+[*]Smooth - evens out bumpy terrain
+[*]Roughen - adds natural-looking variation
+[/list]
+Brush radius and step size are in the mod config.
+
 [h2]Notes[/h2]
-Multiplayer sync is in but still early — report any desync you hit.
+[list]
+[*]Commands use internal names (WoodBlock, not Wood). Point at a block and use /tilename to find its name.
+[*]Flipped furniture keeps facing the same way. Rotation isn't supported, since Terraria furniture can't turn sideways.
+[*]Schematics with modded blocks load correctly when the same mods are enabled.
+[*]Schematic files are in Documents\My Games\Terraria\tModLoader\Schematics\BuildingQOL.
+[/list]
 
 [h2]Links[/h2]
 [list]
-[*] Contact: [url=https://skimmilkexe.dev/]skimmilkexe.dev[/url]
+[*]Source code: [url=https://github.com/SkimMilkEXE/BuildingQOL]github.com/SkimMilkEXE/BuildingQOL[/url]
+[*]Contact: [url=https://skimmilkexe.dev/]skimmilkexe.dev[/url]
 [/list]

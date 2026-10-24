@@ -18,19 +18,19 @@ namespace BuildingQOL.Content.Commands
 		{
 			if (args.Length != 1)
 			{
-				caller.Reply("Usage: " + Usage);
+				Chat.Error("Usage: " + Usage);
 				return;
 			}
 
 			if (SelectionSystem.Corner1 is not Point16 c1 || SelectionSystem.Corner2 is not Point16 c2)
 			{
-				caller.Reply("No selection set. Use [ and ] to set one first.");
+				Chat.Error("No selection set. Use [ and ] to set one first.");
 				return;
 			}
 
 			if (!LiquidLookup.TryGetId(args[0], out int liquidId))
 			{
-				caller.Reply($"Couldn't match '{args[0]}' as a liquid. Use water, lava, honey, or shimmer.");
+				Chat.Error($"Couldn't match '{args[0]}' as a liquid. Use water, lava, honey, or shimmer.");
 				return;
 			}
 
@@ -55,7 +55,7 @@ namespace BuildingQOL.Content.Commands
 				}
 			}
 
-			caller.Reply($"Flood-filled open space in selection with {args[0]}.");
+			Chat.Success($"Flood-filled open space in selection with {args[0]}.");
 		}
 	}
 }

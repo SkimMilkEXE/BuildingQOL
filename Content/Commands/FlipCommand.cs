@@ -25,7 +25,7 @@ namespace BuildingQOL.Content.Commands
 					ClipboardSystem.Flip(horizontal: false);
 					break;
 				default:
-					caller.Reply("Usage: " + Usage);
+					Chat.Error("Usage: " + Usage);
 					break;
 			}
 		}

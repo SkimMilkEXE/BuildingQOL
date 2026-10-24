@@ -17,20 +17,20 @@ namespace BuildingQOL.Content.Commands
 		{
 			if (args.Length != 1)
 			{
-				caller.Reply("Usage: " + Usage);
+				Chat.Error("Usage: " + Usage);
 				return;
 			}
 
 			if (SelectionSystem.Corner1 is not Point16 c1 || SelectionSystem.Corner2 is not Point16 c2)
 			{
-				caller.Reply("No selection set. Use [ and ] to set one first.");
+				Chat.Error("No selection set. Use [ and ] to set one first.");
 				return;
 			}
 
 			if (TryFill(c1, c2, args[0], (_, _, _) => true, out string kind))
-				caller.Reply($"Filled selection with {kind} {args[0]}.");
+				Chat.Success($"Filled selection with {kind} {args[0]}.");
 			else
-				caller.Reply(NoMatchMessage(args[0]));
+				Chat.Error(NoMatchMessage(args[0]));
 		}
 
 		// sets every matching cell to the named tile, wall, or liquid. shared with /outline

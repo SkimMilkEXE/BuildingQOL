@@ -18,22 +18,23 @@ namespace BuildingQOL.Content.Commands
 			if (action == "list" && args.Length == 1)
 			{
 				string[] names = ClipboardSystem.ListNames();
-				caller.Reply(names.Length == 0
-					? "No saved schematics yet. Copy a selection, then /schem save <name>."
-					: $"Saved schematics ({names.Length}): {string.Join(", ", names)}");
+				if (names.Length == 0)
+					Chat.Info("No saved schematics yet. Copy a selection, then /schem save <name>.");
+				else
+					Chat.Info($"Saved schematics ({names.Length}): {string.Join(", ", names)}");
 				return;
 			}
 
 			if (args.Length != 2 || action is not ("save" or "load" or "delete"))
 			{
-				caller.Reply("Usage: " + Usage);
+				Chat.Error("Usage: " + Usage);
 				return;
 			}
 
 			string name = args[1];
 			if (!ClipboardSystem.IsValidName(name))
 			{
-				caller.Reply($"'{name}' isn't a valid schematic name. Use letters, numbers, - or _.");
+				Chat.Error($"'{name}' isn't a valid schematic name. Use letters, numbers, - or _.");
 				return;
 			}
 
@@ -46,7 +47,10 @@ namespace BuildingQOL.Content.Commands
 					ClipboardSystem.LoadFromFile(name);
 					break;
 				case "delete":
-					caller.Reply(ClipboardSystem.Delete(name) ? $"Deleted schematic '{name}'." : $"No saved schematic named '{name}'.");
+					if (ClipboardSystem.Delete(name))
+						Chat.Success($"Deleted schematic '{name}'.");
+					else
+						Chat.Error($"No saved schematic named '{name}'.");
 					break;
 			}
 		}

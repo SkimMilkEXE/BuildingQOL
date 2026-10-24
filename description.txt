@@ -1,29 +1,42 @@
-Building Quality of Life adds a WorldEdit-style selection and copy/paste tool for builders.
+WorldEdit-style building tools for Terraria: select an area, copy, flip and paste it, save it as a schematic, and reshape it with chat commands. Everything can be undone.
 
-Mark two corners, then copy, paste, or erase everything inside the selection. Includes a live selection preview, a paste ghost preview, an optional tile grid overlay, and a mod config for outline color/thickness and paste behavior.
+Features:
+- Selection with a live outline, corner markers and size label
+- Copy and paste tiles, walls, slopes, paint, chest names, sign text and tile entities (chest items are left out so nothing can be duplicated)
+- See-through paste preview of the actual blocks and walls
+- Flip the clipboard horizontally or vertically, furniture stays in one piece
+- Named schematics you can load into any world
+- Undo and redo, up to 50 actions back
+- Shape and fill commands: /fill, /outline, /hollow, /blockswap, /floodfill, /drain, /clear
+- Terrain Wand for raising, lowering, smoothing and roughening ground
+- Optional tile grid and cursor highlight
+- Multiplayer sync
 
 Default keybinds (rebindable in Settings > Controls):
-[ - Set selection corner 1
-] - Set selection corner 2
+[ / ] - Set selection corner 1 / corner 2
 Backspace - Clear selection
-Delete - Erase tiles/walls in selection
+Delete - Erase tiles and walls in selection
 C - Copy selection
 V - Paste at cursor
+X - Flip clipboard horizontally
+Z / Y - Undo / Redo
+S / L - Save / load the default schematic slot
 G - Toggle grid overlay
-Z - Undo
-Y - Redo
-S - Save schematic to file
-L - Load schematic from file
-H - Toggle cursor tile highlight
-M - Cycle Terrain Wand mode (Raise/Lower/Smooth/Roughen)
+H - Toggle cursor highlight
+M - Cycle Terrain Wand mode
 
-Terrain Wand: a tool for sculpting terrain, not tied to a selection. New characters spawn with one, or craft it from 10 Wood at a Work Bench. Left-click near the ground to Raise, Lower, Smooth, or Roughen a strip of terrain centered on your cursor, depending on the current mode.
+Commands (type in chat, /qolhelp lists them in-game):
+/fill <block> - Fill the selection with a tile, wall or liquid
+/outline <block> - Place a 1-tile border around the edge of the selection
+/hollow - Remove the blocks inside the selection, keeping a 1-tile shell
+/blockswap <from> <to> - Replace one tile, wall or liquid with another
+/floodfill <water|lava|honey|shimmer> - Fill the open space with liquid and let it settle
+/drain - Remove all liquid in the selection
+/clear - Erase tiles, walls and liquid in the selection
+/flip <h|v> - Flip the clipboard
+/schem save|load|delete <name> - Manage named schematics
+/schem list - List saved schematics
+/tilename - Show the internal names of what's under your cursor
+/qolhelp - List all commands
 
-Commands (type in chat):
-/blockswap <from> <to> - Replace one tile/wall/liquid type with another inside your selection (e.g. /blockswap WoodBlock RichMahogany, or /blockswap water lava)
-/fill <block> - Fill your entire selection with one tile/wall/liquid type (e.g. /fill StoneBlock, or /fill lava)
-/floodfill <water|lava|honey|shimmer> - Fill only the open space in your selection with liquid, then let it settle naturally
-/drain - Remove all liquid in your selection, leaving tiles/walls untouched
-/clear - Erase tiles, walls, and liquid in your selection (Erase + Drain combined)
-/tilename - Reports the tile/wall/liquid ID names under your cursor, for use with /blockswap and /fill
-/qolhelp - Lists all BuildingQOL commands and what they do
+Terrain Wand: new characters spawn with one, or craft it from 10 Wood at a Work Bench. Left-click to Raise, Lower, Smooth or Roughen a strip of ground centered on your cursor. M cycles the mode.

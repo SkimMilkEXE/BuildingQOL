@@ -18,17 +18,17 @@ namespace BuildingQOL.Content.Commands
 			int y = Player.tileTargetY;
 			if (!WorldGen.InWorld(x, y))
 			{
-				caller.Reply("No valid tile under cursor.");
+				Chat.Error("No valid tile under cursor.");
 				return;
 			}
 
 			Tile tile = Main.tile[x, y];
 
 			string tileName = tile.HasTile && TileID.Search.TryGetName(tile.TileType, out string tName) ? tName : "none";
-			string wallName = tile.WallType != 0 && WallID.Search.TryGetName(tile.WallType, out string wName) ? wName : "none";
+			string wallName = tile.WallType != WallID.None && WallID.Search.TryGetName(tile.WallType, out string wName) ? wName : "none";
 			string liquidName = tile.LiquidAmount > 0 ? LiquidLookup.GetName(tile.LiquidType) ?? "unknown" : "none";
 
-			caller.Reply($"Tile: {tileName}   Wall: {wallName}   Liquid: {liquidName}");
+			Chat.Info($"Tile: {tileName}   Wall: {wallName}   Liquid: {liquidName}");
 		}
 	}
 }

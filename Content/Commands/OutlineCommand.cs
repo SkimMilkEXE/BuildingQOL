@@ -17,13 +17,13 @@ namespace BuildingQOL.Content.Commands
 		{
 			if (args.Length != 1)
 			{
-				caller.Reply("Usage: " + Usage);
+				Chat.Error("Usage: " + Usage);
 				return;
 			}
 
 			if (SelectionSystem.Corner1 is not Point16 c1 || SelectionSystem.Corner2 is not Point16 c2)
 			{
-				caller.Reply("No selection set. Use [ and ] to set one first.");
+				Chat.Error("No selection set. Use [ and ] to set one first.");
 				return;
 			}
 
@@ -31,9 +31,9 @@ namespace BuildingQOL.Content.Commands
 			int lastY = Math.Abs(c1.Y - c2.Y);
 
 			if (FillCommand.TryFill(c1, c2, args[0], (x, y, _) => x == 0 || y == 0 || x == lastX || y == lastY, out string kind))
-				caller.Reply($"Outlined selection with {kind} {args[0]}.");
+				Chat.Success($"Outlined selection with {kind} {args[0]}.");
 			else
-				caller.Reply(FillCommand.NoMatchMessage(args[0]));
+				Chat.Error(FillCommand.NoMatchMessage(args[0]));
 		}
 	}
 }

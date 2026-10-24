@@ -16,13 +16,13 @@ namespace BuildingQOL.Content.Commands
 		{
 			if (SelectionSystem.Corner1 is not Point16 c1 || SelectionSystem.Corner2 is not Point16 c2)
 			{
-				caller.Reply("No selection set. Use [ and ] to set one first.");
+				Chat.Error("No selection set. Use [ and ] to set one first.");
 				return;
 			}
 
 			SelectionSystem.Erase();
 			RegionMutator.Apply(c1, c2, tile => tile.LiquidAmount > 0, tile => tile.LiquidAmount = 0);
-			caller.Reply("Cleared tiles, walls, and liquid in selection.");
+			Chat.Success("Cleared tiles, walls, and liquid in selection.");
 		}
 	}
 }

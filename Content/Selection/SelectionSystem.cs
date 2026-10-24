@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace BuildingQOL.Content.Selection
@@ -82,8 +83,8 @@ namespace BuildingQOL.Content.Selection
 
 					// WorldGen.KillWall has no noItem option and always drops an item; clear the wall field directly instead.
 					Tile tile = Main.tile[x, y];
-					tile.WallType = 0;
-					tile.WallColor = 0;
+					tile.WallType = WallID.None;
+					tile.WallColor = PaintID.None;
 				}
 			}
 
@@ -109,6 +110,9 @@ namespace BuildingQOL.Content.Selection
 				BuildingQOLConfig config = ModContent.GetInstance<BuildingQOLConfig>();
 				Color color = Corner2 is null ? config.OutlineColor * 0.5f : config.OutlineColor;
 				DrawSelectionOutline(pixel, c1, c2, color, config.OutlineThickness);
+				DrawCornerMarker(pixel, c1, color);
+				DrawCornerMarker(pixel, c2, color);
+				DrawSizeLabel(c1, c2, config.OutlineColor);
 			}
 
 			Main.spriteBatch.End();
@@ -126,6 +130,22 @@ namespace BuildingQOL.Content.Selection
 			Vector2 pos = new Vector2(mouseTile.X * 16, mouseTile.Y * 16) - Main.screenPosition;
 
 			Main.spriteBatch.Draw(pixel, new Rectangle((int)pos.X, (int)pos.Y, 16, 16), Color.White * 0.3f);
+		}
+
+		// tints the corner tiles so it's clear exactly which tiles the corners are on
+		private static void DrawCornerMarker(Texture2D pixel, Point16 corner, Color color)
+		{
+			Vector2 pos = new Vector2(corner.X * 16, corner.Y * 16) - Main.screenPosition;
+			Main.spriteBatch.Draw(pixel, new Rectangle((int)pos.X, (int)pos.Y, 16, 16), color * 0.35f);
+		}
+
+		// "12 x 8" just above the selection's top-left corner
+		private static void DrawSizeLabel(Point16 c1, Point16 c2, Color color)
+		{
+			int width = Math.Abs(c1.X - c2.X) + 1;
+			int height = Math.Abs(c1.Y - c2.Y) + 1;
+			Vector2 pos = new Vector2(Math.Min(c1.X, c2.X) * 16, Math.Min(c1.Y, c2.Y) * 16 - 22) - Main.screenPosition;
+			Utils.DrawBorderString(Main.spriteBatch, $"{width} x {height}", pos, color, 0.9f);
 		}
 
 		private static void DrawSelectionOutline(Texture2D pixel, Point16 c1, Point16 c2, Color color, int thickness)

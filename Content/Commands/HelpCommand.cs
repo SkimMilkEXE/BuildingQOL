@@ -23,14 +23,14 @@ namespace BuildingQOL.Content.Commands
 			("/schem save|load|delete <name>", "Save the clipboard as a named schematic, load one back, or delete one."),
 			("/schem list", "Lists your saved schematics."),
 			("/flip <h|v>", "Flips the clipboard horizontally or vertically before pasting."),
-			("/tilename","Reports the tile/wall/liquid ID names under your cursor."),
+			("/tilename", "Reports the tile/wall/liquid ID names under your cursor."),
 		};
 
 		public override void Action(CommandCaller caller, string input, string[] args)
 		{
-			caller.Reply("BuildingQOL commands:");
+			Chat.Info("Commands:");
 			foreach ((string usage, string description) in Commands)
-				caller.Reply($"{usage} - {description}");
+				Chat.Info($"  {usage} - {description}", withPrefix: false);
 		}
 	}
 }

@@ -4,10 +4,12 @@ using Terraria.ModLoader.Config;
 
 namespace BuildingQOL.Content.Selection
 {
+	// labels, tooltips and header text live in Localization/en-US_Mods.BuildingQOL.hjson
 	public class BuildingQOLConfig : ModConfig
 	{
 		public override ConfigScope Mode => ConfigScope.ClientSide;
 
+		[Header("Selection")]
 		[DefaultValue(typeof(Color), "0, 255, 255, 255")]
 		public Color OutlineColor;
 
@@ -15,21 +17,17 @@ namespace BuildingQOL.Content.Selection
 		[DefaultValue(2)]
 		public int OutlineThickness;
 
+		[Header("Paste")]
 		[DefaultValue(true)]
-		[Label("Auto-reframe on paste")]
-		[Tooltip("Recalculates tile/wall visuals in and around the pasted area so it blends with neighbors")]
 		public bool AutoReframeOnPaste;
 
+		[Header("TerrainWand")]
 		[Range(1, 20)]
 		[DefaultValue(4)]
-		[Label("Terrain Wand brush radius")]
-		[Tooltip("How many columns on each side of your cursor the Terrain Wand affects per use")]
 		public int TerrainBrushRadius;
 
 		[Range(1, 10)]
 		[DefaultValue(3)]
-		[Label("Terrain Wand step amount")]
-		[Tooltip("How many tiles Raise/Lower shifts terrain by per use")]
 		public int TerrainStepAmount;
 	}
 }

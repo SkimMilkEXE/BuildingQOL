@@ -133,13 +133,17 @@ namespace BuildingQOL.Content.Selection
 		public static void Copy()
 		{
 			if (SelectionSystem.Corner1 is not Point16 c1 || SelectionSystem.Corner2 is not Point16 c2)
+			{
+				Chat.Error("No selection set. Use [ and ] to set one first.");
 				return;
+			}
 
 			int minX = System.Math.Min(c1.X, c2.X);
 			int minY = System.Math.Min(c1.Y, c2.Y);
 			_width = System.Math.Abs(c1.X - c2.X) + 1;
 			_height = System.Math.Abs(c1.Y - c2.Y) + 1;
 			_clipboard = RegionSnapshot.Capture(minX, minY, _width, _height, includeChestItems: false);
+			Chat.Success($"Copied {_width}x{_height} selection - press V to paste.");
 		}
 
 		public static void Paste(Point16 anchor)
@@ -156,30 +160,30 @@ namespace BuildingQOL.Content.Selection
 		{
 			if (_clipboard == null)
 			{
-				Main.NewText("Nothing copied yet - press C to copy a selection first.", Color.OrangeRed);
+				Chat.Error("Nothing copied yet - press C to copy a selection first.");
 				return;
 			}
 
 			_clipboard = _clipboard.Flipped(horizontal);
-			Main.NewText($"Flipped clipboard {(horizontal ? "horizontally" : "vertically")}.", Color.LimeGreen);
+			Chat.Success($"Flipped clipboard {(horizontal ? "horizontally" : "vertically")}.");
 		}
 
 		public static void SaveToFile(string name = DefaultSchematicName)
 		{
 			if (_clipboard == null)
 			{
-				Main.NewText("Nothing copied yet - press C to copy a selection first.", Color.OrangeRed);
+				Chat.Error("Nothing copied yet - press C to copy a selection first.");
 				return;
 			}
 
 			try
 			{
 				_clipboard.Save(PathFor(name));
-				Main.NewText($"Saved {_width}x{_height} schematic '{name}'.", Color.LimeGreen);
+				Chat.Success($"Saved {_width}x{_height} schematic '{name}'.");
 			}
 			catch (System.Exception e) when (e is IOException or System.UnauthorizedAccessException)
 			{
-				Main.NewText($"Couldn't save schematic '{name}': {e.Message}", Color.OrangeRed);
+				Chat.Error($"Couldn't save schematic '{name}': {e.Message}");
 			}
 		}
 
@@ -188,7 +192,7 @@ namespace BuildingQOL.Content.Selection
 			string path = PathFor(name);
 			if (!File.Exists(path))
 			{
-				Main.NewText($"No saved schematic named '{name}' - use /schem list to see saved ones.", Color.OrangeRed);
+				Chat.Error($"No saved schematic named '{name}' - use /schem list to see saved ones.");
 				return;
 			}
 
@@ -199,13 +203,13 @@ namespace BuildingQOL.Content.Selection
 			}
 			catch (System.Exception e)
 			{
-				Main.NewText($"Couldn't load schematic '{name}': {e.Message}", Color.OrangeRed);
+				Chat.Error($"Couldn't load schematic '{name}': {e.Message}");
 				return;
 			}
 
 			_width = _clipboard.Width;
 			_height = _clipboard.Height;
-			Main.NewText($"Loaded {_width}x{_height} schematic '{name}' - press V to paste.", Color.LimeGreen);
+			Chat.Success($"Loaded {_width}x{_height} schematic '{name}' - press V to paste.");
 		}
 
 		public static string[] ListNames()
