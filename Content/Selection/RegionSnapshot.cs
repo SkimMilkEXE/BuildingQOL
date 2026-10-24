@@ -16,7 +16,7 @@ namespace BuildingQOL.Content.Selection
 	// Shared by the clipboard (copy/paste) and the undo/redo history, which both just need "snapshot region, restore region".
 	public class RegionSnapshot
 	{
-		private struct TileData
+		public struct TileData
 		{
 			public bool HasTile;
 			public ushort TileType;
@@ -42,6 +42,9 @@ namespace BuildingQOL.Content.Selection
 		private readonly Dictionary<Point16, ChestData> _chests = new();
 		private readonly Dictionary<Point16, string> _signs = new();
 		private readonly Dictionary<Point16, (Type Type, byte[] Data)> _tileEntities = new();
+
+		// read-only cell access, used by the paste preview
+		public TileData this[int x, int y] => _tiles[x, y];
 
 		private RegionSnapshot(int width, int height)
 		{
