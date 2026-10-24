@@ -12,6 +12,7 @@ Keybinds: {
 	"Save Schematic To File.DisplayName": Save  Schematic  To  File
 	"Toggle Cursor Highlight.DisplayName": Toggle  Cursor  Highlight
 	"Cycle Terrain Wand Mode.DisplayName": Cycle  Terrain  Wand  Mode
+	"Flip Clipboard Horizontally.DisplayName": Flip  Clipboard  Horizontally
 }
 
 Configs: {

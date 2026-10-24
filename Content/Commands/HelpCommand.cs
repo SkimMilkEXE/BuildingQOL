@@ -20,6 +20,7 @@ namespace BuildingQOL.Content.Commands
 			("/clear", "Erase tiles, walls, and liquid in your selection (Erase + Drain combined)."),
 			("/schem save|load|delete <name>", "Save the clipboard as a named schematic, load one back, or delete one."),
 			("/schem list", "Lists your saved schematics."),
+			("/flip <h|v>", "Flips the clipboard horizontally or vertically before pasting."),
 			("/tilename","Reports the tile/wall/liquid ID names under your cursor."),
 		};
 

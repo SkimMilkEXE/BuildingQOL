@@ -16,6 +16,7 @@ namespace BuildingQOL.Content.Selection
 		public static ModKeybind PasteKeybind;
 		public static ModKeybind SaveKeybind;
 		public static ModKeybind LoadKeybind;
+		public static ModKeybind FlipKeybind;
 
 		private static RegionSnapshot _clipboard;
 		private static int _width;
@@ -44,6 +45,7 @@ namespace BuildingQOL.Content.Selection
 			PasteKeybind = KeybindLoader.RegisterKeybind(Mod, "Paste Selection", "V");
 			SaveKeybind = KeybindLoader.RegisterKeybind(Mod, "Save Schematic To File", "S");
 			LoadKeybind = KeybindLoader.RegisterKeybind(Mod, "Load Schematic From File", "L");
+			FlipKeybind = KeybindLoader.RegisterKeybind(Mod, "Flip Clipboard Horizontally", "X");
 		}
 
 		public override void Unload()
@@ -52,6 +54,7 @@ namespace BuildingQOL.Content.Selection
 			PasteKeybind = null;
 			SaveKeybind = null;
 			LoadKeybind = null;
+			FlipKeybind = null;
 			_clipboard = null;
 		}
 
@@ -98,6 +101,18 @@ namespace BuildingQOL.Content.Selection
 			RegionSnapshot before = RegionSnapshot.Capture(anchor.X, anchor.Y, _width, _height);
 			_clipboard.Apply(anchor);
 			UndoSystem.Record(anchor, before, RegionSnapshot.Capture(anchor.X, anchor.Y, _width, _height));
+		}
+
+		public static void Flip(bool horizontal)
+		{
+			if (_clipboard == null)
+			{
+				Main.NewText("Nothing copied yet - press C to copy a selection first.", Color.OrangeRed);
+				return;
+			}
+
+			_clipboard = _clipboard.Flipped(horizontal);
+			Main.NewText($"Flipped clipboard {(horizontal ? "horizontally" : "vertically")}.", Color.LimeGreen);
 		}
 
 		public static void SaveToFile(string name = DefaultSchematicName)

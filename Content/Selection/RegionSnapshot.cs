@@ -8,6 +8,7 @@ using Terraria.GameContent.Tile_Entities;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using Terraria.ObjectData;
 
 namespace BuildingQOL.Content.Selection
 {
@@ -243,6 +244,128 @@ namespace BuildingQOL.Content.Selection
 			if (Main.netMode != NetmodeID.SinglePlayer)
 				SyncToNetwork(anchor);
 		}
+
+		// mirrors the snapshot left-right or top-bottom. multi-tile furniture moves as one piece instead of
+		// being mirrored cell by cell, so it doesn't get torn apart
+		// ponytail: furniture keeps facing the same way and is sized from style 0, use per-style data if a tile breaks
+		public RegionSnapshot Flipped(bool horizontal)
+		{
+			var flipped = new RegionSnapshot(Width, Height);
+
+			for (int x = 0; x < Width; x++)
+			{
+				for (int y = 0; y < Height; y++)
+				{
+					TileData data = _tiles[x, y];
+
+					// walls are always 1x1, so they just mirror in place
+					int wallX = horizontal ? Width - 1 - x : x;
+					int wallY = horizontal ? y : Height - 1 - y;
+					flipped._tiles[wallX, wallY].WallType = data.WallType;
+					flipped._tiles[wallX, wallY].WallColor = data.WallColor;
+
+					if (!data.HasTile || FlippedTilePos(data, x, y, horizontal) is not Point16 target)
+						continue;
+
+					ref TileData dest = ref flipped._tiles[target.X, target.Y];
+					dest.HasTile = true;
+					dest.TileType = data.TileType;
+					dest.FrameX = data.FrameX;
+					dest.FrameY = data.FrameY;
+					dest.HalfBrick = data.HalfBrick; // ponytail: half blocks stay bottom-half on a vertical flip, terraria has no top-half block
+					dest.Slope = FlipSlope(data.Slope, horizontal);
+					dest.TileColor = data.TileColor;
+				}
+			}
+
+			// entities are keyed by their object's top-left cell, so they follow that cell
+			foreach (KeyValuePair<Point16, ChestData> entry in _chests)
+			{
+				if (FlippedTilePos(_tiles[entry.Key.X, entry.Key.Y], entry.Key.X, entry.Key.Y, horizontal) is Point16 target)
+					flipped._chests[target] = entry.Value;
+			}
+
+			foreach (KeyValuePair<Point16, string> entry in _signs)
+			{
+				if (FlippedTilePos(_tiles[entry.Key.X, entry.Key.Y], entry.Key.X, entry.Key.Y, horizontal) is Point16 target)
+					flipped._signs[target] = entry.Value;
+			}
+
+			foreach (KeyValuePair<Point16, (Type Type, byte[] Data)> entry in _tileEntities)
+			{
+				if (FlippedTilePos(_tiles[entry.Key.X, entry.Key.Y], entry.Key.X, entry.Key.Y, horizontal) is Point16 target)
+					flipped._tileEntities[target] = entry.Value;
+			}
+
+			return flipped;
+		}
+
+		// where a tile cell lands after a flip. a cell that's part of a multi-tile object keeps its spot inside
+		// the object, and the whole object mirrors. null means it would land outside the snapshot
+		private Point16? FlippedTilePos(TileData data, int x, int y, bool horizontal)
+		{
+			int size = 1;
+			int local = 0;
+
+			if (data.HasTile && Main.tileFrameImportant[data.TileType] && TileObjectData.GetTileData(data.TileType, 0) is TileObjectData obj)
+			{
+				if (horizontal && obj.CoordinateFullWidth > 0)
+				{
+					size = obj.Width;
+					local = data.FrameX % obj.CoordinateFullWidth / (obj.CoordinateWidth + obj.CoordinatePadding);
+				}
+				else if (!horizontal && obj.CoordinateFullHeight > 0)
+				{
+					size = obj.Height;
+					local = LocalRow(obj, data.FrameY % obj.CoordinateFullHeight);
+				}
+
+				// frames that don't fit the object's grid, treat it as a plain cell
+				if (local >= size)
+				{
+					size = 1;
+					local = 0;
+				}
+			}
+
+			int length = horizontal ? Width : Height;
+			int pos = horizontal ? x : y;
+
+			// object starts at pos - local, mirrored start is length - size - start, then add local back
+			int newPos = length - size - pos + 2 * local;
+			if (newPos < 0 || newPos >= length)
+				return null;
+
+			return horizontal ? new Point16(newPos, y) : new Point16(x, newPos);
+		}
+
+		// rows can have different pixel heights (e.g. 18 for the bottom row), so walk them instead of dividing
+		private static int LocalRow(TileObjectData obj, int frameY)
+		{
+			int row = 0;
+			int rowTop = 0;
+			while (row < obj.Height - 1 && frameY >= rowTop + obj.CoordinateHeights[row] + obj.CoordinatePadding)
+			{
+				rowTop += obj.CoordinateHeights[row] + obj.CoordinatePadding;
+				row++;
+			}
+
+			return row;
+		}
+
+		// horizontal swaps left/right, vertical swaps up/down
+		private static SlopeType FlipSlope(SlopeType slope, bool horizontal) => (slope, horizontal) switch
+		{
+			(SlopeType.SlopeDownLeft, true) => SlopeType.SlopeDownRight,
+			(SlopeType.SlopeDownRight, true) => SlopeType.SlopeDownLeft,
+			(SlopeType.SlopeUpLeft, true) => SlopeType.SlopeUpRight,
+			(SlopeType.SlopeUpRight, true) => SlopeType.SlopeUpLeft,
+			(SlopeType.SlopeDownLeft, false) => SlopeType.SlopeUpLeft,
+			(SlopeType.SlopeUpLeft, false) => SlopeType.SlopeDownLeft,
+			(SlopeType.SlopeDownRight, false) => SlopeType.SlopeUpRight,
+			(SlopeType.SlopeUpRight, false) => SlopeType.SlopeDownRight,
+			_ => slope,
+		};
 
 		// Broadcasts the change so other clients (and the server, if we're a client) pick it up.
 		// This is the one part of the mod that can't be verified without a second live client.

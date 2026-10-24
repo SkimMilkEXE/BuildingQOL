@@ -10,6 +10,7 @@ A tModLoader mod that adds building quality of life features — currently a Wor
 - Erase all tiles/walls inside a selection
 - Undo/redo for paste and erase, up to 50 actions back
 - Save/load the clipboard to a file, so a schematic can be carried into a different world. Keep a library of builds with named schematics (`/schem save castle`)
+- Flip the clipboard horizontally or vertically before pasting; multi-tile furniture stays in one piece
 - Optional tile grid overlay for precise alignment
 - Mod config for outline color/thickness and auto-reframe on paste
 - `/blockswap <from> <to>` and `/fill <block>` chat commands to replace or fill tile/wall/liquid types inside the selection
@@ -32,6 +33,7 @@ Rebindable in-game via Settings > Controls.
 | `Y` | Redo |
 | `S` | Save schematic to the default slot (use `/schem save <name>` for named ones) |
 | `L` | Load schematic from the default slot (use `/schem load <name>` for named ones) |
+| `X` | Flip clipboard horizontally (use `/flip v` for vertical) |
 | `H` | Toggle cursor tile highlight |
 | `M` | Cycle Terrain Wand mode (Raise → Lower → Smooth → Roughen) |
 
@@ -46,6 +48,7 @@ Rebindable in-game via Settings > Controls.
 | `/clear` | Erase tiles, walls, and liquid in the current selection (Erase + Drain combined). Undoes in two steps, not one. |
 | `/schem save\|load\|delete <name>` | Save the clipboard as a named schematic, load one back into the clipboard, or delete one. Files are stored in `Documents\My Games\Terraria\tModLoader\Schematics\BuildingQOL`. |
 | `/schem list` | Lists your saved schematics. |
+| `/flip <h\|v>` | Flip the clipboard horizontally or vertically before pasting. Furniture moves as one piece but keeps facing the same way. |
 | `/tilename` | Reports the tile/wall/liquid internal ID names under your cursor, for use with `/blockswap` and `/fill`. |
 | `/qolhelp` | Lists all BuildingQOL commands and what they do. |
 

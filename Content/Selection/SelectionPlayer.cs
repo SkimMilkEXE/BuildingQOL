@@ -45,6 +45,9 @@ namespace BuildingQOL.Content.Selection
 			if (ClipboardSystem.LoadKeybind.JustPressed)
 				ClipboardSystem.LoadFromFile();
 
+			if (ClipboardSystem.FlipKeybind.JustPressed)
+				ClipboardSystem.Flip(horizontal: true);
+
 			if (GridSystem.ToggleKeybind.JustPressed)
 				GridSystem.Enabled = !GridSystem.Enabled;
 
