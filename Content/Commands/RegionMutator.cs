@@ -13,6 +13,10 @@ namespace BuildingQOL.Content.Commands
 		// Returns how many tiles matched, so callers can report back (e.g. "0 matched" points at a resolution
 		// bug rather than a rendering one).
 		public static int Apply(Point16 c1, Point16 c2, Predicate<Tile> matches, Action<Tile> apply)
+			=> Apply(c1, c2, (_, _, tile) => matches(tile), apply);
+
+		// position-aware version for shapes, matches gets (x, y) relative to the selection's top-left
+		public static int Apply(Point16 c1, Point16 c2, Func<int, int, Tile, bool> matches, Action<Tile> apply)
 		{
 			int minX = Math.Min(c1.X, c2.X);
 			int maxX = Math.Max(c1.X, c2.X);
@@ -33,7 +37,7 @@ namespace BuildingQOL.Content.Commands
 						continue;
 
 					Tile tile = Main.tile[x, y];
-					if (matches(tile))
+					if (matches(x - minX, y - minY, tile))
 					{
 						apply(tile);
 						matchCount++;

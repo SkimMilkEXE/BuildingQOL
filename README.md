@@ -14,6 +14,7 @@ A tModLoader mod that adds building quality of life features — currently a Wor
 - Optional tile grid overlay for precise alignment
 - Mod config for outline color/thickness and auto-reframe on paste
 - `/blockswap <from> <to>` and `/fill <block>` chat commands to replace or fill tile/wall/liquid types inside the selection
+- `/outline <block>` and `/hollow` shape commands for quick room frames and hollowed-out builds
 - Terrain Wand item (craft from 10 Wood at a Work Bench, or spawn with one automatically) for sculpting terrain around the cursor: Raise, Lower, Smooth, Roughen, cycled with a keybind
 
 ## Default keybinds
@@ -44,6 +45,8 @@ Rebindable in-game via Settings > Controls.
 | `/fill <block>` | Fill the entire current selection with one tile, wall, or liquid type. |
 | `/floodfill <water\|lava\|honey\|shimmer>` | Fill only the open space in the selection with liquid, then let it settle naturally instead of staying a static block. |
 | `/blockswap <from> <to>` | Replace one tile, wall, or liquid type with another inside the current selection. Uses exact internal IDs (e.g. `WoodBlock`, not `Wood`), or `water`/`lava`/`honey`/`shimmer` for liquids. |
+| `/outline <block>` | Place a 1-tile border of a tile, wall, or liquid around the edge of the selection. Handy for a room's frame: `/outline GrayBrick`. |
+| `/hollow` | Remove the blocks inside the selection, keeping a 1-tile shell around the edge. Furniture, torches, and walls are left alone. |
 | `/drain` | Remove all liquid in the current selection, leaving tiles/walls untouched. |
 | `/clear` | Erase tiles, walls, and liquid in the current selection (Erase + Drain combined). Undoes in two steps, not one. |
 | `/schem save\|load\|delete <name>` | Save the clipboard as a named schematic, load one back into the clipboard, or delete one. Files are stored in `Documents\My Games\Terraria\tModLoader\Schematics\BuildingQOL`. |

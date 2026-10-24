@@ -27,11 +27,19 @@ namespace BuildingQOL.Content.Commands
 				return;
 			}
 
-			string name = args[0];
+			if (TryFill(c1, c2, args[0], (_, _, _) => true, out string kind))
+				caller.Reply($"Filled selection with {kind} {args[0]}.");
+			else
+				caller.Reply(NoMatchMessage(args[0]));
+		}
 
+		// sets every matching cell to the named tile, wall, or liquid. shared with /outline
+		// kind is "tile", "wall" or "liquid" for the reply message
+		internal static bool TryFill(Point16 c1, Point16 c2, string name, System.Func<int, int, Terraria.Tile, bool> where, out string kind)
+		{
 			if (IdSearch.TryGetTileId(name, out int tileId))
 			{
-				RegionMutator.Apply(c1, c2, _ => true, tile =>
+				RegionMutator.Apply(c1, c2, where, tile =>
 				{
 					tile.HasTile = true;
 					tile.TileType = (ushort)tileId;
@@ -40,29 +48,33 @@ namespace BuildingQOL.Content.Commands
 					tile.IsHalfBlock = false;
 					tile.Slope = SlopeType.Solid;
 				});
-				caller.Reply($"Filled selection with tile {name}.");
-				return;
+				kind = "tile";
+				return true;
 			}
 
 			if (IdSearch.TryGetWallId(name, out int wallId))
 			{
-				RegionMutator.Apply(c1, c2, _ => true, tile => tile.WallType = (ushort)wallId);
-				caller.Reply($"Filled selection with wall {name}.");
-				return;
+				RegionMutator.Apply(c1, c2, where, tile => tile.WallType = (ushort)wallId);
+				kind = "wall";
+				return true;
 			}
 
 			if (LiquidLookup.TryGetId(name, out int liquidId))
 			{
-				RegionMutator.Apply(c1, c2, _ => true, tile =>
+				RegionMutator.Apply(c1, c2, where, tile =>
 				{
 					tile.LiquidType = (byte)liquidId;
 					tile.LiquidAmount = 255;
 				});
-				caller.Reply($"Filled selection with liquid {name}.");
-				return;
+				kind = "liquid";
+				return true;
 			}
 
-			caller.Reply($"Couldn't match '{name}' as a tile, wall, or liquid name. Use exact internal IDs (e.g. WoodBlock, not Wood), or water/lava/honey for liquids.");
+			kind = null;
+			return false;
 		}
+
+		internal static string NoMatchMessage(string name) =>
+			$"Couldn't match '{name}' as a tile, wall, or liquid name. Use exact internal IDs (e.g. WoodBlock, not Wood), or water/lava/honey for liquids.";
 	}
 }
