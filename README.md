@@ -9,7 +9,7 @@ A tModLoader mod that adds building quality of life features — currently a Wor
 - Copy/paste chest contents, sign text, and other tile entities (item frames, weapon racks, display dolls, hat racks, food platters, logic sensors, training dummies, pylons) along with their tiles
 - Erase all tiles/walls inside a selection
 - Undo/redo for paste and erase, up to 50 actions back
-- Save/load the clipboard to a file, so a schematic can be carried into a different world
+- Save/load the clipboard to a file, so a schematic can be carried into a different world. Keep a library of builds with named schematics (`/schem save castle`)
 - Optional tile grid overlay for precise alignment
 - Mod config for outline color/thickness and auto-reframe on paste
 - `/blockswap <from> <to>` and `/fill <block>` chat commands to replace or fill tile/wall/liquid types inside the selection
@@ -30,8 +30,8 @@ Rebindable in-game via Settings > Controls.
 | `G` | Toggle grid overlay |
 | `Z` | Undo |
 | `Y` | Redo |
-| `S` | Save schematic to file |
-| `L` | Load schematic from file |
+| `S` | Save schematic to the default slot (use `/schem save <name>` for named ones) |
+| `L` | Load schematic from the default slot (use `/schem load <name>` for named ones) |
 | `H` | Toggle cursor tile highlight |
 | `M` | Cycle Terrain Wand mode (Raise → Lower → Smooth → Roughen) |
 
@@ -44,6 +44,8 @@ Rebindable in-game via Settings > Controls.
 | `/blockswap <from> <to>` | Replace one tile, wall, or liquid type with another inside the current selection. Uses exact internal IDs (e.g. `WoodBlock`, not `Wood`), or `water`/`lava`/`honey`/`shimmer` for liquids. |
 | `/drain` | Remove all liquid in the current selection, leaving tiles/walls untouched. |
 | `/clear` | Erase tiles, walls, and liquid in the current selection (Erase + Drain combined). Undoes in two steps, not one. |
+| `/schem save\|load\|delete <name>` | Save the clipboard as a named schematic, load one back into the clipboard, or delete one. Files are stored in `Documents\My Games\Terraria\tModLoader\Schematics\BuildingQOL`. |
+| `/schem list` | Lists your saved schematics. |
 | `/tilename` | Reports the tile/wall/liquid internal ID names under your cursor, for use with `/blockswap` and `/fill`. |
 | `/qolhelp` | Lists all BuildingQOL commands and what they do. |
 

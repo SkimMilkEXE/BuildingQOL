@@ -18,7 +18,9 @@ namespace BuildingQOL.Content.Commands
 			("/floodfill <liquid>", "Fill the open space in your selection with liquid, then let it settle naturally."),
 			("/drain", "Remove all liquid in your selection, leaving tiles/walls untouched."),
 			("/clear", "Erase tiles, walls, and liquid in your selection (Erase + Drain combined)."),
-			("/tilename", "Reports the tile/wall/liquid ID names under your cursor."),
+			("/schem save|load|delete <name>", "Save the clipboard as a named schematic, load one back, or delete one."),
+			("/schem list", "Lists your saved schematics."),
+			("/tilename","Reports the tile/wall/liquid ID names under your cursor."),
 		};
 
 		public override void Action(CommandCaller caller, string input, string[] args)

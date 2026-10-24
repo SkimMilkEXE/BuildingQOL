@@ -21,7 +21,22 @@ namespace BuildingQOL.Content.Selection
 		private static int _width;
 		private static int _height;
 
-		private static string SchematicPath => Path.Combine(Main.SavePath, "Schematics", "BuildingQOL", "clipboard.bqol");
+		// the s/l keybinds use this slot so older saves keep working
+		public const string DefaultSchematicName = "clipboard";
+		private const string SchematicExtension = ".bqol";
+
+		public static string SchematicFolder => Path.Combine(Main.SavePath, "Schematics", "BuildingQOL");
+
+		private static string PathFor(string name) => Path.Combine(SchematicFolder, name + SchematicExtension);
+
+		// blocks names that would escape the schematics folder or aren't valid file names
+		public static bool IsValidName(string name)
+		{
+			return !string.IsNullOrWhiteSpace(name)
+				&& name != "." && name != ".."
+				&& name.IndexOfAny(Path.GetInvalidFileNameChars()) < 0
+				&& name.IndexOfAny(new[] { '/', '\\' }) < 0; // linux allows '\' in file names, so check it here too
+		}
 
 		public override void Load()
 		{
@@ -85,8 +100,7 @@ namespace BuildingQOL.Content.Selection
 			UndoSystem.Record(anchor, before, RegionSnapshot.Capture(anchor.X, anchor.Y, _width, _height));
 		}
 
-		// Single fixed save slot; rename/move the file outside the game to keep more than one schematic.
-		public static void SaveToFile()
+		public static void SaveToFile(string name = DefaultSchematicName)
 		{
 			if (_clipboard == null)
 			{
@@ -94,22 +108,62 @@ namespace BuildingQOL.Content.Selection
 				return;
 			}
 
-			_clipboard.Save(SchematicPath);
-			Main.NewText($"Saved {_width}x{_height} schematic to file.", Color.LimeGreen);
+			try
+			{
+				_clipboard.Save(PathFor(name));
+				Main.NewText($"Saved {_width}x{_height} schematic '{name}'.", Color.LimeGreen);
+			}
+			catch (System.Exception e) when (e is IOException or System.UnauthorizedAccessException)
+			{
+				Main.NewText($"Couldn't save schematic '{name}': {e.Message}", Color.OrangeRed);
+			}
 		}
 
-		public static void LoadFromFile()
+		public static void LoadFromFile(string name = DefaultSchematicName)
 		{
-			if (!File.Exists(SchematicPath))
+			string path = PathFor(name);
+			if (!File.Exists(path))
 			{
-				Main.NewText("No saved schematic file found.", Color.OrangeRed);
+				Main.NewText($"No saved schematic named '{name}' - use /schem list to see saved ones.", Color.OrangeRed);
 				return;
 			}
 
-			_clipboard = RegionSnapshot.Load(SchematicPath);
+			// a damaged or hand-edited file shouldn't crash the game
+			try
+			{
+				_clipboard = RegionSnapshot.Load(path);
+			}
+			catch (System.Exception e)
+			{
+				Main.NewText($"Couldn't load schematic '{name}': {e.Message}", Color.OrangeRed);
+				return;
+			}
+
 			_width = _clipboard.Width;
 			_height = _clipboard.Height;
-			Main.NewText($"Loaded {_width}x{_height} schematic from file - press V to paste.", Color.LimeGreen);
+			Main.NewText($"Loaded {_width}x{_height} schematic '{name}' - press V to paste.", Color.LimeGreen);
+		}
+
+		public static string[] ListNames()
+		{
+			if (!Directory.Exists(SchematicFolder))
+				return System.Array.Empty<string>();
+
+			string[] names = Directory.GetFiles(SchematicFolder, "*" + SchematicExtension);
+			for (int i = 0; i < names.Length; i++)
+				names[i] = Path.GetFileNameWithoutExtension(names[i]);
+			System.Array.Sort(names, System.StringComparer.OrdinalIgnoreCase);
+			return names;
+		}
+
+		public static bool Delete(string name)
+		{
+			string path = PathFor(name);
+			if (!File.Exists(path))
+				return false;
+
+			File.Delete(path);
+			return true;
 		}
 	}
 }
